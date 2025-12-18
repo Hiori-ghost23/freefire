@@ -6,7 +6,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import datetime, timedelta
-import jwt
+from jose import jwt, JWTError
 import os
 
 from app.database import get_db
@@ -44,7 +44,7 @@ def decode_token(token: str) -> dict:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token expiré"
         )
-    except jwt.InvalidTokenError:
+    except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token invalide"
