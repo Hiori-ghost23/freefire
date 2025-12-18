@@ -1,0 +1,792 @@
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Créer un tournoi — Assistant</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="antialiased bg-[#0b0f14] text-white/90 min-h-screen font-[Inter]">
+    <div class="min-h-screen flex flex-col">
+      <!-- Top bar / App Shell -->
+      <header class="sticky top-0 z-30 backdrop-blur-xl bg-black/30 border-b border-white/10">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-7 h-7 rounded-md bg-white/10 grid place-items-center border border-white/10">
+              <span class="text-[13px] tracking-tight font-semibold">GT</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-[13px] text-white/70">Assistant Tournoi</span>
+              <span class="text-[11px] text-white/40 -mt-0.5">Création guidée</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="px-3 h-8 rounded-md border border-white/10 text-white/80 hover:text-white hover:border-white/20 transition">Aide</button>
+            <button class="px-3 h-8 rounded-md bg-white/10 hover:bg-white/15 border border-white/10 transition">Se déconnecter</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main class="flex-1">
+        <section class="max-w-5xl mx-auto px-4 py-8 sm:py-12">
+          <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-white">Créer un tournoi</h1>
+            <p class="text-white/60 mt-1 text-sm">Complétez les étapes. Vous pourrez confirmer à la fin.</p>
+          </div>
+
+          <!-- Wizard Card -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden">
+            <!-- Progress -->
+            <div class="px-4 sm:px-6 py-5 border-b border-white/10">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <!-- Step badges -->
+                  <div class="flex items-center gap-2">
+                    <div class="flex items-center">
+                      <div id="badge-1" class="w-8 h-8 rounded-full grid place-items-center text-[12px] font-medium bg-white/10 border border-white/15">1</div>
+                      <div class="w-8 h-[2px] bg-white/10 mx-2"></div>
+                      <div id="badge-2" class="w-8 h-8 rounded-full grid place-items-center text-[12px] font-medium bg-white/5 border border-white/10 text-white/50">2</div>
+                      <div class="w-8 h-[2px] bg-white/10 mx-2"></div>
+                      <div id="badge-3" class="w-8 h-8 rounded-full grid place-items-center text-[12px] font-medium bg-white/5 border border-white/10 text-white/50">3</div>
+                      <div class="w-8 h-[2px] bg-white/10 mx-2"></div>
+                      <div id="badge-4" class="w-8 h-8 rounded-full grid place-items-center text-[12px] font-medium bg-white/5 border border-white/10 text-white/50">4</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div id="step-label" class="text-sm text-white/70">Étape 1 sur 4</div>
+                </div>
+              </div>
+              <div class="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-white/80 rounded-full transition-all duration-500 ease-out" style="width: 25%;"></div>
+              </div>
+            </div>
+
+            <!-- Steps container -->
+            <form id="wizardForm" class="px-4 sm:px-6 py-6 space-y-6">
+              <!-- STEP 1 -->
+              <div id="step-1" class="space-y-8 transition-all duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <!-- Visibilité -->
+                  <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                    <div class="flex items-center justify-between mb-3">
+                      <div>
+                        <h3 class="text-base font-semibold tracking-tight text-white">Visibilité</h3>
+                        <p class="text-xs text-white/60">Choisissez Public ou Privé</p>
+                      </div>
+                      <i data-lucide="eye" class="w-5 h-5 text-white/60"></i>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                      <button type="button" data-visibility="public" class="vis-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="globe-2" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">Public</span>
+                        </div>
+                        <p class="text-[11px] text-white/50 mt-1">Visible par tous</p>
+                      </button>
+                      <button type="button" data-visibility="prive" class="vis-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="lock" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">Privé</span>
+                        </div>
+                        <p class="text-[11px] text-white/50 mt-1">Accès par code</p>
+                      </button>
+                    </div>
+                    <p id="err-visibility" class="mt-2 text-xs text-rose-400 hidden">Veuillez choisir une visibilité.</p>
+                  </div>
+
+                  <!-- Mode -->
+                  <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                    <div class="flex items-center justify-between mb-3">
+                      <div>
+                        <h3 class="text-base font-semibold tracking-tight text-white">Mode</h3>
+                        <p class="text-xs text-white/60">Sélectionnez un format</p>
+                      </div>
+                      <i data-lucide="gamepad-2" class="w-5 h-5 text-white/60"></i>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      <button type="button" data-mode="BR Solo" class="mode-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="user" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">BR Solo</span>
+                        </div>
+                      </button>
+                      <button type="button" data-mode="BR Duo" class="mode-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="users" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">BR Duo</span>
+                        </div>
+                      </button>
+                      <button type="button" data-mode="BR Squad" class="mode-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="users-round" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">BR Squad</span>
+                        </div>
+                      </button>
+                      <button type="button" data-mode="Clash Squad" class="mode-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="swords" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">Clash Squad</span>
+                        </div>
+                      </button>
+                      <button type="button" data-mode="Lone Wolf" class="mode-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="shield-half" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">Lone Wolf</span>
+                        </div>
+                      </button>
+                      <button type="button" data-mode="Room HS" class="mode-btn group px-3 py-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/[0.08] transition text-left">
+                        <div class="flex items-center gap-2">
+                          <i data-lucide="crosshair" class="w-4 h-4 text-white/70"></i>
+                          <span class="text-sm font-medium">Room HS</span>
+                        </div>
+                      </button>
+                    </div>
+                    <p id="err-mode" class="mt-2 text-xs text-rose-400 hidden">Veuillez sélectionner un mode.</p>
+                  </div>
+                </div>
+
+                <!-- Date & heure -->
+                <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                  <div class="flex items-center justify-between mb-3">
+                    <div>
+                      <h3 class="text-base font-semibold tracking-tight text-white">Date &amp; heure</h3>
+                      <p class="text-xs text-white/60">Planifiez la session</p>
+                    </div>
+                    <i data-lucide="calendar-clock" class="w-5 h-5 text-white/60"></i>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="text-xs text-white/60">Début</label>
+                      <input id="datetime" type="datetime-local" class="mt-1 w-full rounded-lg bg-black/30 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 px-3 py-2 text-sm placeholder:text-white/40">
+                      <p id="err-datetime" class="mt-2 text-xs text-rose-400 hidden">Veuillez choisir une date future.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 2 -->
+              <div id="step-2" class="space-y-6 transition-all duration-500 hidden opacity-0 -translate-y-1">
+                <!-- Récompenses -->
+                <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                  <div class="flex items-center justify-between mb-3">
+                    <div>
+                      <h3 class="text-base font-semibold tracking-tight text-white">Récompenses</h3>
+                      <p class="text-xs text-white/60">Détaillez les gains (facultatif)</p>
+                    </div>
+                    <i data-lucide="trophy" class="w-5 h-5 text-white/60"></i>
+                  </div>
+                  <textarea id="rewards" rows="3" class="w-full rounded-lg bg-black/30 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 px-3 py-2 text-sm placeholder:text-white/40" placeholder="Ex.: 1er 50€, 2e 25€, 3e 10€..."></textarea>
+                </div>
+
+                <!-- Description -->
+                <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                  <div class="flex items-center justify-between mb-3">
+                    <div>
+                      <h3 class="text-base font-semibold tracking-tight text-white">Description</h3>
+                      <p class="text-xs text-white/60">Jusqu’à 10 000 caractères</p>
+                    </div>
+                    <i data-lucide="file-text" class="w-5 h-5 text-white/60"></i>
+                  </div>
+                  <div>
+                    <textarea id="description" rows="5" maxlength="10000" class="w-full rounded-lg bg-black/30 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 px-3 py-2 text-sm placeholder:text-white/40" placeholder="Règles, format, critères, etc."></textarea>
+                    <div class="flex items-center justify-between mt-1">
+                      <span id="desc-counter" class="text-xs text-white/50">0 / 10 000</span>
+                      <p id="err-description" class="text-xs text-rose-400 hidden">Description trop longue.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Contact / Créateur -->
+                <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                  <div class="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 class="text-base font-semibold tracking-tight text-white">Contact &amp; Créateur</h3>
+                      <p class="text-xs text-white/60">WhatsApp requis si vous êtes le créateur</p>
+                    </div>
+                    <i data-lucide="phone" class="w-5 h-5 text-white/60"></i>
+                  </div>
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                      <button id="creator-toggle" type="button" class="w-11 h-6 rounded-full bg-white/10 border border-white/15 relative transition shadow-inner">
+                        <span id="creator-knob" class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white/80 transition"></span>
+                      </button>
+                      <span class="text-sm">Je suis le créateur</span>
+                    </div>
+                    <div class="w-full max-w-sm">
+                      <label class="text-xs text-white/60">Contact WhatsApp</label>
+                      <div class="mt-1 relative">
+                        <input id="whatsapp" type="tel" inputmode="tel" placeholder="+33 6 12 34 56 78" class="w-full rounded-lg bg-black/30 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 px-3 py-2 text-sm placeholder:text-white/40">
+                        <i data-lucide="message-circle" class="w-4 h-4 text-white/50 absolute right-2 top-2.5"></i>
+                      </div>
+                      <p id="err-whatsapp" class="mt-2 text-xs text-rose-400 hidden">WhatsApp est requis.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 3 -->
+              <div id="step-3" class="space-y-6 transition-all duration-500 hidden opacity-0 -translate-y-1">
+                <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                  <div class="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 class="text-base font-semibold tracking-tight text-white">Frais d’entrée</h3>
+                      <p class="text-xs text-white/60">Optionnel</p>
+                    </div>
+                    <i data-lucide="coins" class="w-5 h-5 text-white/60"></i>
+                  </div>
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2">
+                      <button id="fee-toggle" type="button" class="w-11 h-6 rounded-full bg-white/10 border border-white/15 relative transition shadow-inner">
+                        <span id="fee-knob" class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white/80 transition"></span>
+                      </button>
+                      <span class="text-sm">Activer</span>
+                    </div>
+                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div class="sm:col-span-2">
+                        <label class="text-xs text-white/60">Montant</label>
+                        <input id="fee-amount" type="number" step="0.01" min="0" placeholder="0.00" class="mt-1 w-full rounded-lg bg-black/30 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/20 px-3 py-2 text-sm placeholder:text-white/40 disabled:opacity-50" disabled="">
+                        <p id="err-fee" class="mt-2 text-xs text-rose-400 hidden">Montant invalide.</p>
+                      </div>
+                      <div class="relative">
+                        <label class="text-xs text-white/60">Devise</label>
+                        <button id="currency-btn" type="button" class="mt-1 w-full flex items-center justify-between px-3 py-2 rounded-lg bg-black/30 border border-white/10 hover:border-white/20 transition text-sm disabled:opacity-50" disabled="">
+                          <span id="currency-label">EUR</span>
+                          <i data-lucide="chevrons-up-down" class="w-4 h-4 text-white/60"></i>
+                        </button>
+                        <div id="currency-menu" class="absolute mt-1 w-full rounded-lg border border-white/10 bg-[#0d1218] shadow-xl overflow-hidden hidden z-20">
+                          <div class="py-1">
+                            <button type="button" data-currency="EUR" class="w-full text-left px-3 py-2 hover:bg-white/10 text-sm">EUR — €</button>
+                            <button type="button" data-currency="USD" class="w-full text-left px-3 py-2 hover:bg-white/10 text-sm">USD — $</button>
+                            <button type="button" data-currency="XOF" class="w-full text-left px-3 py-2 hover:bg-white/10 text-sm">XOF — CFA</button>
+                            <button type="button" data-currency="XAF" class="w-full text-left px-3 py-2 hover:bg-white/10 text-sm">XAF — CFA</button>
+                            <button type="button" data-currency="INR" class="w-full text-left px-3 py-2 hover:bg-white/10 text-sm">INR — ₹</button>
+                            <button type="button" data-currency="BRL" class="w-full text-left px-3 py-2 hover:bg-white/10 text-sm">BRL — R$</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 4 -->
+              <div id="step-4" class="space-y-6 transition-all duration-500 hidden opacity-0 -translate-y-1">
+                <div class="p-4 rounded-xl border border-white/10 bg-white/[0.03]">
+                  <div class="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 class="text-base font-semibold tracking-tight text-white">Résumé &amp; Confirmation</h3>
+                      <p class="text-xs text-white/60">Vérifiez vos informations</p>
+                    </div>
+                    <i data-lucide="check-circle-2" class="w-5 h-5 text-white/60"></i>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="rounded-lg border border-white/10 p-3 bg-black/20">
+                      <div class="text-xs text-white/50">Visibilité</div>
+                      <div id="sum-visibility" class="text-sm mt-0.5">—</div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 p-3 bg-black/20">
+                      <div class="text-xs text-white/50">Mode</div>
+                      <div id="sum-mode" class="text-sm mt-0.5">—</div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 p-3 bg-black/20">
+                      <div class="text-xs text-white/50">Date &amp; heure</div>
+                      <div id="sum-datetime" class="text-sm mt-0.5">—</div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 p-3 bg-black/20">
+                      <div class="text-xs text-white/50">Frais d’entrée</div>
+                      <div id="sum-fee" class="text-sm mt-0.5">Aucun</div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 p-3 bg-black/20 md:col-span-2">
+                      <div class="text-xs text-white/50">Récompenses</div>
+                      <div id="sum-rewards" class="text-sm mt-0.5 whitespace-pre-wrap">—</div>
+                    </div>
+                    <div class="rounded-lg border border-white/10 p-3 bg-black/20 md:col-span-2">
+                      <div class="text-xs text-white/50">Description</div>
+                      <div id="sum-description" class="text-sm mt-0.5 whitespace-pre-wrap line-clamp-5">—</div>
+                    </div>
+                  </div>
+
+                  <!-- Ticket code (if privé) -->
+                  <div id="ticket-wrap" class="mt-5 hidden">
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="flex items-center gap-2">
+                        <i data-lucide="ticket" class="w-5 h-5 text-white/70"></i>
+                        <span class="text-sm font-medium">Ticket privé</span>
+                      </div>
+                      <span class="text-[11px] text-white/50">Partagez ce code uniquement avec les participants</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-3 rounded-lg border border-white/10 bg-black/30">
+                      <code id="ticket-code" class="font-mono text-sm tracking-wider">—</code>
+                      <div class="ml-auto flex items-center gap-2">
+                        <button id="copy-ticket" type="button" class="px-2.5 h-8 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center gap-2">
+                          <i data-lucide="copy" class="w-4 h-4"></i>
+                          <span class="text-xs">Copier</span>
+                        </button>
+                        <span id="copy-feedback" class="text-xs text-emerald-400 hidden">Copié</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer actions -->
+              <div class="pt-2 flex items-center justify-between border-t border-white/10">
+                <button id="prevBtn" type="button" class="mt-4 px-4 h-10 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                  <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                  <span>Retour</span>
+                </button>
+                <div class="flex items-center gap-3">
+                  <button id="saveDraft" type="button" class="mt-4 px-4 h-10 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-white/80 hover:text-white">
+                    Enregistrer le brouillon
+                  </button>
+                  <button id="nextBtn" type="button" class="mt-4 px-4 h-10 rounded-lg bg-white text-black hover:bg-white/90 transition flex items-center gap-2">
+                    <span>Suivant</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                  <button id="submitBtn" type="button" class="mt-4 px-4 h-10 rounded-lg bg-white text-black hover:bg-white/90 transition hidden">
+                    Soumettre
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Final state -->
+            <div id="final-state" class="p-8 hidden">
+              <div class="max-w-md mx-auto text-center">
+                <div class="w-14 h-14 rounded-full bg-emerald-400/10 border border-emerald-400/20 grid place-items-center mx-auto">
+                  <i data-lucide="badge-check" class="w-7 h-7 text-emerald-400"></i>
+                </div>
+                <h3 class="mt-4 text-xl font-semibold tracking-tight">Demande envoyée</h3>
+                <p class="mt-1 text-sm text-white/70">En examen ≤ 48h</p>
+                <div class="mt-6 flex items-center justify-center gap-3">
+                  <button id="createAnother" class="px-4 h-10 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition">Créer un autre</button>
+                  <button class="px-4 h-10 rounded-lg bg-white text-black hover:bg-white/90 transition">Retour à l’accueil</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="py-6 text-center text-xs text-white/40">
+        © 2025 GT — Tous droits réservés
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      // Initialize icons with stroke-width 1.5
+      function renderIcons() {
+        lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+      }
+
+      const state = {
+        currentStep: 1,
+        totalSteps: 4,
+        visibility: null, // 'public' | 'prive'
+        mode: null,
+        datetime: '',
+        rewards: '',
+        description: '',
+        isCreator: true,
+        whatsapp: '',
+        hasFee: false,
+        feeAmount: '',
+        currency: 'EUR',
+        ticketCode: ''
+      };
+
+      const els = {
+        steps: [1,2,3,4].reduce((acc, s) => { acc[s] = document.getElementById('step-' + s); return acc; }, {}),
+        badges: [1,2,3,4].reduce((acc, s) => { acc[s] = document.getElementById('badge-' + s); return acc; }, {}),
+        progress: document.getElementById('progress-bar'),
+        stepLabel: document.getElementById('step-label'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn'),
+        submitBtn: document.getElementById('submitBtn'),
+        saveDraft: document.getElementById('saveDraft'),
+        // Step 1
+        visBtns: Array.from(document.querySelectorAll('.vis-btn')),
+        modeBtns: Array.from(document.querySelectorAll('.mode-btn')),
+        datetime: document.getElementById('datetime'),
+        errVisibility: document.getElementById('err-visibility'),
+        errMode: document.getElementById('err-mode'),
+        errDatetime: document.getElementById('err-datetime'),
+        // Step 2
+        rewards: document.getElementById('rewards'),
+        description: document.getElementById('description'),
+        descCounter: document.getElementById('desc-counter'),
+        creatorToggle: document.getElementById('creator-toggle'),
+        creatorKnob: document.getElementById('creator-knob'),
+        whatsapp: document.getElementById('whatsapp'),
+        errWhatsapp: document.getElementById('err-whatsapp'),
+        errDescription: document.getElementById('err-description'),
+        // Step 3
+        feeToggle: document.getElementById('fee-toggle'),
+        feeKnob: document.getElementById('fee-knob'),
+        feeAmount: document.getElementById('fee-amount'),
+        currencyBtn: document.getElementById('currency-btn'),
+        currencyMenu: document.getElementById('currency-menu'),
+        currencyLabel: document.getElementById('currency-label'),
+        errFee: document.getElementById('err-fee'),
+        // Step 4
+        sumVisibility: document.getElementById('sum-visibility'),
+        sumMode: document.getElementById('sum-mode'),
+        sumDatetime: document.getElementById('sum-datetime'),
+        sumFee: document.getElementById('sum-fee'),
+        sumRewards: document.getElementById('sum-rewards'),
+        sumDescription: document.getElementById('sum-description'),
+        ticketWrap: document.getElementById('ticket-wrap'),
+        ticketCode: document.getElementById('ticket-code'),
+        copyTicket: document.getElementById('copy-ticket'),
+        copyFeedback: document.getElementById('copy-feedback'),
+        // Final
+        finalState: document.getElementById('final-state'),
+        createAnother: document.getElementById('createAnother')
+      };
+
+      // Helpers
+      function setActiveCard(buttons, valueKey, value) {
+        buttons.forEach(btn => {
+          const active = btn.dataset[valueKey] === value;
+          btn.classList.toggle('ring-2', active);
+          btn.classList.toggle('ring-white/20', active);
+          btn.classList.toggle('border-white/20', active);
+          btn.classList.toggle('bg-white/10', active);
+        });
+      }
+
+      function updateProgressUI() {
+        const pct = (state.currentStep / state.totalSteps) * 100;
+        els.progress.style.width = pct + '%';
+        els.stepLabel.textContent = `Étape ${state.currentStep} sur ${state.totalSteps}`;
+
+        // Badges
+        for (let i = 1; i <= state.totalSteps; i++) {
+          const b = els.badges[i];
+          const isPast = i < state.currentStep;
+          const isCurrent = i === state.currentStep;
+          b.className = "w-8 h-8 rounded-full grid place-items-center text-[12px] font-medium";
+          if (isCurrent) {
+            b.classList.add("bg-white/10","border","border-white/20");
+            b.textContent = i;
+          } else if (isPast) {
+            b.classList.add("bg-emerald-400/20","border","border-emerald-400/30","text-emerald-300");
+            b.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>';
+          } else {
+            b.classList.add("bg-white/5","border","border-white/10","text-white/50");
+            b.textContent = i;
+          }
+        }
+        renderIcons();
+      }
+
+      function showStep(step) {
+        for (let i = 1; i <= state.totalSteps; i++) {
+          const el = els.steps[i];
+          if (i === step) {
+            el.classList.remove('hidden');
+            requestAnimationFrame(() => {
+              el.classList.remove('opacity-0','-translate-y-1');
+              el.classList.add('opacity-100','translate-y-0');
+            });
+          } else {
+            el.classList.add('hidden','opacity-0','-translate-y-1');
+            el.classList.remove('opacity-100','translate-y-0');
+          }
+        }
+        // Footer buttons
+        els.prevBtn.disabled = step === 1;
+        els.nextBtn.classList.toggle('hidden', step === state.totalSteps);
+        els.submitBtn.classList.toggle('hidden', step !== state.totalSteps);
+        updateProgressUI();
+      }
+
+      function isFutureDatetime(value) {
+        if (!value) return false;
+        const d = new Date(value);
+        const now = new Date();
+        return d.getTime() > (now.getTime() + 5 * 60 * 1000); // at least 5 min in the future
+      }
+
+      function validateStep(step) {
+        let ok = true;
+        // reset errors
+        [els.errVisibility, els.errMode, els.errDatetime, els.errWhatsapp, els.errDescription, els.errFee].forEach(e => e && e.classList.add('hidden'));
+
+        if (step === 1) {
+          if (!state.visibility) {
+            els.errVisibility.classList.remove('hidden'); ok = false;
+          }
+          if (!state.mode) {
+            els.errMode.classList.remove('hidden'); ok = false;
+          }
+          if (!isFutureDatetime(state.datetime)) {
+            els.errDatetime.classList.remove('hidden'); ok = false;
+          }
+        }
+        if (step === 2) {
+          if (state.description && state.description.length > 10000) {
+            els.errDescription.classList.remove('hidden'); ok = false;
+          }
+          if (state.isCreator && (!state.whatsapp || state.whatsapp.trim().length < 6)) {
+            els.errWhatsapp.classList.remove('hidden'); ok = false;
+          }
+        }
+        if (step === 3) {
+          if (state.hasFee) {
+            const amt = parseFloat(state.feeAmount);
+            if (!(amt > 0)) {
+              els.errFee.classList.remove('hidden'); ok = false;
+            }
+            if (!state.currency) {
+              els.errFee.classList.remove('hidden'); ok = false;
+            }
+          }
+        }
+        return ok;
+      }
+
+      function updateSummary() {
+        els.sumVisibility.textContent = state.visibility ? (state.visibility === 'public' ? 'Public' : 'Privé') : '—';
+        els.sumMode.textContent = state.mode || '—';
+        els.sumDatetime.textContent = state.datetime ? new Date(state.datetime).toLocaleString() : '—';
+        if (state.hasFee) {
+          els.sumFee.textContent = `${Number(state.feeAmount).toFixed(2)} ${state.currency}`;
+        } else {
+          els.sumFee.textContent = 'Aucun';
+        }
+        els.sumRewards.textContent = state.rewards?.trim() ? state.rewards : '—';
+        els.sumDescription.textContent = state.description?.trim() ? state.description : '—';
+
+        if (state.visibility === 'prive') {
+          if (!state.ticketCode) {
+            state.ticketCode = generateTicket();
+          }
+          els.ticketCode.textContent = state.ticketCode;
+          els.ticketWrap.classList.remove('hidden');
+        } else {
+          els.ticketWrap.classList.add('hidden');
+        }
+      }
+
+      function generateTicket() {
+        // 8-char code: 4 letters + 4 digits (base36)
+        const part1 = Math.random().toString(36).slice(2, 6).toUpperCase();
+        const part2 = Math.random().toString(36).slice(2, 6).toUpperCase();
+        return `${part1}-${part2}`;
+      }
+
+      function goNext() {
+        if (!validateStep(state.currentStep)) return;
+        if (state.currentStep < state.totalSteps) {
+          state.currentStep += 1;
+          if (state.currentStep === 4) updateSummary();
+          showStep(state.currentStep);
+        }
+      }
+
+      function goPrev() {
+        if (state.currentStep > 1) {
+          state.currentStep -= 1;
+          showStep(state.currentStep);
+        }
+      }
+
+      // Bind Step 1
+      els.visBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.visibility = btn.dataset.visibility;
+          setActiveCard(els.visBtns, 'visibility', state.visibility);
+          els.errVisibility.classList.add('hidden');
+        });
+      });
+
+      els.modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.mode = btn.dataset.mode;
+          setActiveCard(els.modeBtns, 'mode', state.mode);
+          els.errMode.classList.add('hidden');
+        });
+      });
+
+      els.datetime.addEventListener('input', (e) => {
+        state.datetime = e.target.value;
+        els.errDatetime.classList.add('hidden');
+      });
+
+      // Step 2
+      function setToggle(btn, knob, on) {
+        btn.classList.toggle('bg-emerald-500/20', on);
+        btn.classList.toggle('border-emerald-400/40', on);
+        knob.style.transform = on ? 'translateX(20px)' : 'translateX(0px)';
+        knob.classList.toggle('bg-emerald-300', on);
+      }
+
+      // default creator = true
+      setToggle(els.creatorToggle, els.creatorKnob, true);
+      els.creatorToggle.addEventListener('click', () => {
+        state.isCreator = !state.isCreator;
+        setToggle(els.creatorToggle, els.creatorKnob, state.isCreator);
+        if (!state.isCreator) {
+          els.errWhatsapp.classList.add('hidden');
+        }
+      });
+
+      els.whatsapp.addEventListener('input', (e) => {
+        state.whatsapp = e.target.value;
+        els.errWhatsapp.classList.add('hidden');
+      });
+
+      els.rewards.addEventListener('input', (e) => {
+        state.rewards = e.target.value;
+      });
+
+      els.description.addEventListener('input', (e) => {
+        state.description = e.target.value;
+        els.descCounter.textContent = `${state.description.length} / 10 000`;
+        if (state.description.length <= 10000) {
+          els.errDescription.classList.add('hidden');
+        }
+      });
+
+      // Step 3
+      setToggle(els.feeToggle, els.feeKnob, false);
+      els.feeToggle.addEventListener('click', () => {
+        state.hasFee = !state.hasFee;
+        setToggle(els.feeToggle, els.feeKnob, state.hasFee);
+        els.feeAmount.disabled = !state.hasFee;
+        els.currencyBtn.disabled = !state.hasFee;
+        if (!state.hasFee) {
+          els.errFee.classList.add('hidden');
+        }
+      });
+
+      els.feeAmount.addEventListener('input', (e) => {
+        state.feeAmount = e.target.value;
+        els.errFee.classList.add('hidden');
+      });
+
+      // Currency custom dropdown
+      let currencyOpen = false;
+      function toggleCurrency(open) {
+        currencyOpen = open !== undefined ? open : !currencyOpen;
+        els.currencyMenu.classList.toggle('hidden', !currencyOpen);
+      }
+      els.currencyBtn.addEventListener('click', () => {
+        if (els.currencyBtn.disabled) return;
+        toggleCurrency();
+      });
+      els.currencyMenu.querySelectorAll('button[data-currency]').forEach(item => {
+        item.addEventListener('click', () => {
+          state.currency = item.dataset.currency;
+          els.currencyLabel.textContent = state.currency;
+          toggleCurrency(false);
+          renderIcons();
+        });
+      });
+      document.addEventListener('click', (e) => {
+        if (!els.currencyBtn.contains(e.target) && !els.currencyMenu.contains(e.target)) {
+          toggleCurrency(false);
+        }
+      });
+
+      // Navigation
+      els.nextBtn.addEventListener('click', goNext);
+      els.prevBtn.addEventListener('click', goPrev);
+
+      els.submitBtn.addEventListener('click', () => {
+        if (!validateStep(4)) return;
+        // Show final state
+        document.getElementById('wizardForm').classList.add('hidden');
+        els.finalState.classList.remove('hidden');
+        renderIcons();
+      });
+
+      els.saveDraft.addEventListener('click', () => {
+        // Lightweight draft save: localStorage
+        localStorage.setItem('tournamentDraft', JSON.stringify(state));
+        els.saveDraft.textContent = 'Brouillon enregistré';
+        setTimeout(() => els.saveDraft.textContent = 'Enregistrer le brouillon', 1500);
+      });
+
+      els.copyTicket.addEventListener('click', async () => {
+        if (!state.ticketCode) return;
+        try {
+          await navigator.clipboard.writeText(state.ticketCode);
+          els.copyFeedback.classList.remove('hidden');
+          setTimeout(() => els.copyFeedback.classList.add('hidden'), 1200);
+        } catch (e) {}
+      });
+
+      els.createAnother.addEventListener('click', () => {
+        // Reset state
+        Object.assign(state, {
+          currentStep: 1,
+          visibility: null,
+          mode: null,
+          datetime: '',
+          rewards: '',
+          description: '',
+          isCreator: true,
+          whatsapp: '',
+          hasFee: false,
+          feeAmount: '',
+          currency: 'EUR',
+          ticketCode: ''
+        });
+        // Reset UI
+        document.getElementById('wizardForm').reset();
+        els.descCounter.textContent = '0 / 10 000';
+        setActiveCard(els.visBtns, 'visibility', '');
+        setActiveCard(els.modeBtns, 'mode', '');
+        setToggle(els.creatorToggle, els.creatorKnob, true);
+        setToggle(els.feeToggle, els.feeKnob, false);
+        els.feeAmount.disabled = true;
+        els.currencyBtn.disabled = true;
+        els.currencyLabel.textContent = 'EUR';
+        els.ticketWrap.classList.add('hidden');
+        els.finalState.classList.add('hidden');
+        document.getElementById('wizardForm').classList.remove('hidden');
+        showStep(1);
+        renderIcons();
+      });
+
+      // Load draft if exists
+      (function loadDraft() {
+        try {
+          const draft = JSON.parse(localStorage.getItem('tournamentDraft') || 'null');
+          if (!draft) return;
+          Object.assign(state, draft);
+          // Restore UI
+          if (state.visibility) {
+            setActiveCard(els.visBtns, 'visibility', state.visibility);
+          }
+          if (state.mode) {
+            setActiveCard(els.modeBtns, 'mode', state.mode);
+          }
+          if (state.datetime) els.datetime.value = state.datetime;
+          if (state.rewards) els.rewards.value = state.rewards;
+          if (state.description) {
+            els.description.value = state.description;
+            els.descCounter.textContent = `${state.description.length} / 10 000`;
+          }
+          setToggle(els.creatorToggle, els.creatorKnob, !!state.isCreator);
+          if (state.whatsapp) els.whatsapp.value = state.whatsapp;
+          setToggle(els.feeToggle, els.feeKnob, !!state.hasFee);
+          els.feeAmount.disabled = !state.hasFee;
+          els.currencyBtn.disabled = !state.hasFee;
+          if (state.feeAmount) els.feeAmount.value = state.feeAmount;
+          if (state.currency) els.currencyLabel.textContent = state.currency;
+        } catch(e) {}
+      })();
+
+      // Initial render
+      showStep(state.currentStep);
+      renderIcons();
+    </script>
+  
+</body></html>

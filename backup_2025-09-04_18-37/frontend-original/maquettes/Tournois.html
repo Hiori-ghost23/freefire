@@ -1,0 +1,367 @@
+<html lang="fr"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournois</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8 opacity-0 animate-[fadeIn_0.6s_ease-out_0.1s_forwards]" style="animation: fadeIn 0.6s ease-out 0.1s forwards;">
+            <h1 class="text-3xl font-semibold text-gray-900 tracking-tight mb-2">Tournois</h1>
+            <p class="text-gray-600">Découvrez et participez aux tournois disponibles</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8 opacity-0" style="animation: fadeIn 0.6s ease-out 0.3s forwards;">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                <!-- Public/Privé Filter -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Visibilité</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option>Tous</option>
+                        <option>Public</option>
+                        <option>Privé</option>
+                    </select>
+                </div>
+
+                <!-- Mode Filter -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Mode</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option>Tous les modes</option>
+                        <option>BR Solo</option>
+                        <option>BR Duo</option>
+                        <option>BR Squad</option>
+                        <option>Clash Squad</option>
+                        <option>Lone Wolf</option>
+                        <option>Room HS</option>
+                    </select>
+                </div>
+
+                <!-- Date Filter -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Date</label>
+                    <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                </div>
+
+                <!-- Sort -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Trier par</label>
+                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option>Date (Plus récent)</option>
+                        <option>Date (Plus ancien)</option>
+                        <option>Prix d'entrée</option>
+                    </select>
+                </div>
+
+                <!-- Reset Filters -->
+                <div class="flex items-end">
+                    <button class="w-full px-4 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        Réinitialiser
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Recherche</label>
+                    <div class="relative">
+                        <input type="text" placeholder="Nom du tournoi..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tournament Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Tournament Card 1 -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 opacity-0" style="animation: fadeIn 0.6s ease-out 0.5s forwards;">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">Championship Elite</h3>
+                        <p class="text-sm text-gray-600 mb-2">BR Squad</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                            15 Déc 2024, 18:00
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Validé
+                    </span>
+                </div>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Visibilité:</span>
+                        <span class="text-gray-900 font-medium">Public</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Frais d'entrée:</span>
+                        <span class="text-gray-900 font-medium">50€</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Participants:</span>
+                        <span class="text-gray-900 font-medium">24/32</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex space-x-3">
+                        <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                            S'inscrire
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournament Card 2 -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 opacity-0" style="animation: fadeIn 0.6s ease-out 0.6s forwards;">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">Clash Masters</h3>
+                        <p class="text-sm text-gray-600 mb-2">Clash Squad</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                            16 Déc 2024, 20:30
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        En cours
+                    </span>
+                </div>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Visibilité:</span>
+                        <span class="text-gray-900 font-medium">Public</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Frais d'entrée:</span>
+                        <span class="text-gray-900 font-medium">Gratuit</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Participants:</span>
+                        <span class="text-gray-900 font-medium">16/16</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex space-x-3">
+                        <button class="flex-1 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                            Complet
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournament Card 3 -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 opacity-0" style="animation: fadeIn 0.6s ease-out 0.7s forwards;">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">Solo Showdown</h3>
+                        <p class="text-sm text-gray-600 mb-2">BR Solo</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                            17 Déc 2024, 14:00
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        En examen
+                    </span>
+                </div>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Visibilité:</span>
+                        <span class="text-gray-900 font-medium">Privé</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Frais d'entrée:</span>
+                        <span class="text-gray-900 font-medium">25€</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Participants:</span>
+                        <span class="text-gray-900 font-medium">8/20</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex space-x-3">
+                        <button class="flex-1 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                            En attente
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournament Card 4 -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 opacity-0" style="animation: fadeIn 0.6s ease-out 0.8s forwards;">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">Duo Legends</h3>
+                        <p class="text-sm text-gray-600 mb-2">BR Duo</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                            18 Déc 2024, 19:00
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        Rejeté
+                    </span>
+                </div>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Visibilité:</span>
+                        <span class="text-gray-900 font-medium">Public</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Frais d'entrée:</span>
+                        <span class="text-gray-900 font-medium">Gratuit</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Participants:</span>
+                        <span class="text-gray-900 font-medium">0/24</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex space-x-3">
+                        <button class="flex-1 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                            Indisponible
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournament Card 5 -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 opacity-0" style="animation: fadeIn 0.6s ease-out 0.9s forwards;">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">Wolf Hunt</h3>
+                        <p class="text-sm text-gray-600 mb-2">Lone Wolf</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                            19 Déc 2024, 16:30
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Validé
+                    </span>
+                </div>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Visibilité:</span>
+                        <span class="text-gray-900 font-medium">Public</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Frais d'entrée:</span>
+                        <span class="text-gray-900 font-medium">10€</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Participants:</span>
+                        <span class="text-gray-900 font-medium">12/30</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex space-x-3">
+                        <button class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                            S'inscrire
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tournament Card 6 -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 opacity-0" style="animation: fadeIn 0.6s ease-out 1s forwards;">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-1">HS Room Battle</h3>
+                        <p class="text-sm text-gray-600 mb-2">Room HS</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                            20 Déc 2024, 21:00
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        Indisponible
+                    </span>
+                </div>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Visibilité:</span>
+                        <span class="text-gray-900 font-medium">Privé</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Frais d'entrée:</span>
+                        <span class="text-gray-900 font-medium">75€</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">Participants:</span>
+                        <span class="text-gray-900 font-medium">0/16</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="flex space-x-3">
+                        <button class="flex-1 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                            Indisponible
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More -->
+        <div class="text-center mt-12 opacity-0" style="animation: fadeIn 0.6s ease-out 1.2s forwards;">
+            <button class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                Charger plus de tournois
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+</body></html>

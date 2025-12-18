@@ -1,0 +1,100 @@
+# =================================================================
+# Docker Compose pour FreeFire MVP - Version 2.4.0
+# Services: API, PostgreSQL, Adminer, MinIO, MailHog
+# =================================================================
+
+version: '3.8'
+
+services:
+  # Base de données PostgreSQL
+  db:
+    image: postgres:15
+    container_name: freefire_db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: freefire_mvp
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d/migrations:ro
+      - ./database/seeds:/docker-entrypoint-initdb.d/seeds:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Interface d'administration de base de données
+  adminer:
+    image: adminer:4
+    container_name: freefire_adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+
+  # Stockage S3-compatible pour les fichiers
+  minio:
+    image: quay.io/minio/minio:RELEASE.2024-07-26T20-58-21Z
+    container_name: freefire_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio12345
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console Web
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # Serveur email pour développement
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: freefire_mailhog
+    ports:
+      - "8025:8025"  # Interface Web
+      - "1025:1025"  # SMTP
+
+  # API FreeFire MVP
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: freefire_api
+    env_file: 
+      - ./api/.env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api/app:/app/app:ro
+      - ./api/config:/app/config:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  db_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  default:
+    name: freefire_network

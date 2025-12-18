@@ -1,0 +1,320 @@
+<html lang="fr"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Détail tournoi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-neutral-950 text-neutral-200 antialiased [font-family:Inter,ui-sans-serif,system-ui] selection:bg-neutral-800 selection:text-neutral-100">
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/60 border-b border-neutral-900">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button class="inline-flex items-center gap-2 rounded-md border border-neutral-800/80 bg-neutral-900/50 px-3 py-2 text-sm text-neutral-300 hover:text-neutral-100 hover:bg-neutral-900 hover:border-neutral-700 transition">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Retour</span>
+        </button>
+        <div class="h-6 w-px bg-neutral-800"></div>
+        <div class="flex items-center gap-2">
+          <div class="flex h-7 w-7 items-center justify-center rounded-md bg-neutral-900 ring-1 ring-inset ring-neutral-800 text-neutral-100 tracking-tight text-[13px] leading-none">TA</div>
+          <span class="text-sm text-neutral-400">Tournois</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="loginBtn" class="inline-flex items-center gap-2 rounded-md border border-neutral-800/80 bg-neutral-900/50 px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-900 hover:text-neutral-100 hover:border-neutral-700 transition">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Se connecter</span>
+        </button>
+        <button class="inline-flex items-center gap-2 rounded-md border border-neutral-800/80 bg-neutral-900/50 px-3 py-2 text-sm text-neutral-300 hover:bg-neutral-900 hover:text-neutral-100 hover:border-neutral-700 transition">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span>Suivre</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="flex flex-col gap-3">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1">
+          <h1 class="text-3xl tracking-tight font-semibold text-neutral-50">Valorant Cup #12</h1>
+          <p class="text-sm text-neutral-400 mt-1">Organisé par <span class="text-neutral-200">ArenaPro</span></p>
+        </div>
+        <div class="hidden md:flex items-center gap-2">
+          <!-- Badges -->
+          <span class="inline-flex items-center gap-1 rounded-md border border-emerald-700/40 bg-emerald-900/30 px-2.5 py-1 text-xs text-emerald-300">
+            <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Ouvert
+          </span>
+          <span class="inline-flex items-center gap-1 rounded-md border border-amber-700/40 bg-amber-900/30 px-2.5 py-1 text-xs text-amber-300">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i> Privé
+          </span>
+          <span class="inline-flex items-center gap-1 rounded-md border border-fuchsia-700/40 bg-fuchsia-900/30 px-2.5 py-1 text-xs text-fuchsia-300">
+            <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Payant
+          </span>
+        </div>
+      </div>
+
+      <!-- Meta quick info -->
+      <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="rounded-lg border border-neutral-900 bg-neutral-950/60 p-4">
+          <div class="flex items-center gap-2 text-neutral-400 text-xs">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            Date &amp; heure
+          </div>
+          <div class="mt-2 text-sm text-neutral-200">Samedi 12 Oct. 2025, 18:00 CET</div>
+        </div>
+        <div class="rounded-lg border border-neutral-900 bg-neutral-950/60 p-4">
+          <div class="flex items-center gap-2 text-neutral-400 text-xs">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+            Récompenses
+          </div>
+          <div class="mt-2 text-sm text-neutral-200">1er 200€ • 2e 100€ • 3e 50€</div>
+        </div>
+        <div class="rounded-lg border border-neutral-900 bg-neutral-950/60 p-4">
+          <div class="flex items-center gap-2 text-neutral-400 text-xs">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            Participants
+          </div>
+          <div class="mt-2 text-sm text-neutral-200"><span id="participantsCount">128</span> / 256 inscrits</div>
+        </div>
+        <div class="rounded-lg border border-neutral-900 bg-neutral-950/60 p-4">
+          <div class="flex items-center gap-2 text-neutral-400 text-xs">
+            <i data-lucide="badge-euro" class="w-4 h-4"></i>
+            Frais d’entrée
+          </div>
+          <div class="mt-2 text-sm text-neutral-200">5,00 €</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left: details -->
+      <section class="lg:col-span-2 space-y-6">
+        <!-- Description -->
+        <div class="rounded-xl border border-neutral-900 bg-neutral-950/60 p-5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg tracking-tight font-semibold text-neutral-100">Description</h2>
+            <span class="text-xs text-neutral-500">max. 10 000 caractères</span>
+          </div>
+          <p class="mt-3 text-sm leading-6 text-neutral-300">
+            Bienvenue à la Valorant Cup #12. Format en élimination directe, BO3 à partir des quarts de finale.
+            Les matchs se jouent sur serveur EU. Anti-cheat obligatoire. Les équipes doivent être prêtes
+            10 minutes avant l’heure de leur match. Toute triche entraînera une disqualification immédiate.
+          </p>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex items-center gap-2 text-sm text-neutral-300">
+              <i data-lucide="map-pin" class="w-4 h-4 text-neutral-400"></i> En ligne (EU)
+            </div>
+            <div class="flex items-center gap-2 text-sm text-neutral-300">
+              <i data-lucide="clock-8" class="w-4 h-4 text-neutral-400"></i> Durée estimée: 4–6h
+            </div>
+          </div>
+          <div class="mt-5 pt-5 border-t border-neutral-900">
+            <h3 class="text-sm font-medium text-neutral-200 tracking-tight mb-2">Règlement express</h3>
+            <ul class="space-y-2 text-sm text-neutral-300">
+              <li class="flex gap-2"><i data-lucide="dot" class="w-4 h-4 text-neutral-500"></i>Check-in 30 min avant le début.</li>
+              <li class="flex gap-2"><i data-lucide="dot" class="w-4 h-4 text-neutral-500"></i>Pause max 10 min entre les cartes.</li>
+              <li class="flex gap-2"><i data-lucide="dot" class="w-4 h-4 text-neutral-500"></i>Capitaine responsable du score.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Ticket requis (Privé) -->
+        <div class="rounded-xl border border-neutral-900 bg-neutral-950/60 p-5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg tracking-tight font-semibold text-neutral-100 flex items-center gap-2">
+              <i data-lucide="key-round" class="w-5 h-5 text-amber-300"></i> Ticket requis
+            </h2>
+            <span class="inline-flex items-center gap-1 rounded-md border border-amber-700/40 bg-amber-900/30 px-2.5 py-1 text-xs text-amber-300">
+              <i data-lucide="lock" class="w-3.5 h-3.5"></i> Privé
+            </span>
+          </div>
+          <p class="mt-2 text-sm text-neutral-400">Ce tournoi est privé. Entrez le ticket d’accès fourni par l’organisateur.</p>
+          <div class="mt-4 flex flex-col sm:flex-row gap-2">
+            <div class="relative flex-1">
+              <i data-lucide="ticket" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500"></i>
+              <input type="text" inputmode="text" placeholder="Ex: VLRNT-9832-AC" class="w-full rounded-md bg-neutral-900/70 border border-neutral-800 pl-9 pr-3 py-2.5 text-sm text-neutral-200 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-600 transition">
+            </div>
+            <button class="inline-flex items-center justify-center gap-2 rounded-md bg-amber-600 hover:bg-amber-500 text-neutral-50 px-4 py-2.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-amber-500/40">
+              <i data-lucide="check" class="w-4 h-4"></i> Valider le ticket
+            </button>
+          </div>
+          <p class="mt-2 text-xs text-neutral-500">Le ticket est requis pour s’inscrire.</p>
+        </div>
+
+        <!-- Contact WhatsApp organisateur (si utilisateur) -->
+        <div class="rounded-xl border border-neutral-900 bg-neutral-950/60 p-5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg tracking-tight font-semibold text-neutral-100 flex items-center gap-2">
+              <i data-lucide="message-circle" class="w-5 h-5 text-emerald-300"></i> Contact organisateur
+            </h2>
+            <span id="authState" class="text-xs text-neutral-500">Non connecté</span>
+          </div>
+
+          <!-- Logged-out state -->
+          <div id="contactPrompt" class="mt-3 flex items-center justify-between rounded-md border border-neutral-900 bg-neutral-950 px-4 py-3">
+            <p class="text-sm text-neutral-400">Connectez-vous pour voir le contact WhatsApp de l’organisateur.</p>
+            <button id="revealContactBtn" class="inline-flex items-center gap-2 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-300 hover:text-neutral-100 hover:border-neutral-700 hover:bg-neutral-900 transition">
+              <i data-lucide="eye" class="w-4 h-4"></i> Afficher
+            </button>
+          </div>
+
+          <!-- Logged-in/contact visible -->
+          <div id="contactCard" class="hidden mt-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-md border border-emerald-800/40 bg-emerald-900/20 px-4 py-3">
+            <div class="flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&amp;w=180&amp;auto=format&amp;fit=crop" alt="Organisateur" class="h-9 w-9 rounded-md object-cover ring-1 ring-inset ring-emerald-800/50">
+              <div>
+                <div class="text-sm text-neutral-100">Alex M.</div>
+                <div class="text-xs text-neutral-300 flex items-center gap-1">
+                  <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-300"></i>
+                  <a href="https://wa.me/33612345678" class="hover:underline text-emerald-300">WhatsApp: +33 6 12 34 56 78</a>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="inline-flex items-center gap-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-neutral-50 px-3 py-2 text-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-500/40">
+                <i data-lucide="message-square" class="w-4 h-4"></i> Envoyer un message
+              </button>
+              <button id="copyPhone" class="inline-flex items-center gap-2 rounded-md border border-emerald-700/50 bg-emerald-900/20 text-emerald-200 px-3 py-2 text-sm hover:bg-emerald-900/30 transition">
+                <i data-lucide="copy" class="w-4 h-4"></i> Copier
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: actions / participants -->
+      <aside class="space-y-6">
+        <!-- CTA card -->
+        <div class="rounded-xl border border-neutral-900 bg-neutral-950/60 p-5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg tracking-tight font-semibold text-neutral-100">Inscription</h3>
+            <span class="inline-flex items-center gap-1 rounded-md border border-fuchsia-700/40 bg-fuchsia-900/30 px-2.5 py-1 text-xs text-fuchsia-300">
+              <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Payant
+            </span>
+          </div>
+          <div class="mt-3 text-sm text-neutral-300">
+            Frais d’entrée: <span class="text-neutral-100 font-medium">5,00 €</span>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 gap-2">
+            <!-- If payant -->
+            <button class="inline-flex items-center justify-center gap-2 rounded-md bg-neutral-50 text-neutral-950 hover:bg-neutral-200 px-4 py-2.5 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-neutral-300/60">
+              <i data-lucide="badge-euro" class="w-4 h-4"></i> Payer les frais d’entrée
+            </button>
+            <!-- If gratuit (example disabled here) -->
+            <button class="inline-flex items-center justify-center gap-2 rounded-md border border-neutral-800 bg-neutral-900/70 text-neutral-400 px-4 py-2.5 text-sm cursor-not-allowed">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> S’inscrire
+            </button>
+          </div>
+
+          <p class="mt-3 text-xs text-neutral-500">Le paiement ouvre votre accès au bracket et au salon de match.</p>
+        </div>
+
+        <!-- Participants -->
+        <div class="rounded-xl border border-neutral-900 bg-neutral-950/60 p-5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg tracking-tight font-semibold text-neutral-100 flex items-center gap-2">
+              <i data-lucide="users" class="w-5 h-5"></i> Participants
+            </h3>
+            <button class="inline-flex items-center gap-1.5 rounded-md border border-neutral-800 bg-neutral-900/60 px-3 py-1.5 text-xs text-neutral-300 hover:text-neutral-100 hover:border-neutral-700 transition">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i> Voir tous
+            </button>
+          </div>
+
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-sm text-neutral-300">Inscrits&nbsp;: <span class="text-neutral-100 font-medium">128</span> / 256</div>
+            <div class="text-xs text-neutral-400">50% de places restantes</div>
+          </div>
+
+          <div class="mt-3 h-2 w-full rounded-full bg-neutral-900 overflow-hidden border border-neutral-900">
+            <div class="h-full bg-neutral-200" style="width: 50%;"></div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-6 gap-2">
+            <!-- Sample avatars -->
+            <img class="h-10 w-10 rounded-md object-cover ring-1 ring-inset ring-neutral-800" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&amp;w=200&amp;auto=format&amp;fit=crop" alt="P1">
+            <img class="h-10 w-10 rounded-md object-cover ring-1 ring-inset ring-neutral-800" src="https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&amp;w=200&amp;auto=format&amp;fit=crop" alt="P2">
+            <img class="h-10 w-10 rounded-md object-cover ring-1 ring-inset ring-neutral-800" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&amp;w=200&amp;auto=format&amp;fit=crop" alt="P3">
+            <img class="h-10 w-10 rounded-md object-cover ring-1 ring-inset ring-neutral-800" src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&amp;q=80" alt="P4">
+            <img class="h-10 w-10 rounded-md object-cover ring-1 ring-inset ring-neutral-800" src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&amp;w=200&amp;auto=format&amp;fit=crop" alt="P5">
+            <div class="h-10 w-10 rounded-md ring-1 ring-inset ring-neutral-800 bg-neutral-900 flex items-center justify-center text-xs text-neutral-300">+120</div>
+          </div>
+        </div>
+
+        <!-- Infos complémentaires -->
+        <div class="rounded-xl border border-neutral-900 bg-neutral-950/60 p-5">
+          <h3 class="text-lg tracking-tight font-semibold text-neutral-100 mb-3">Infos</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="flex items-center gap-2 text-sm text-neutral-300">
+              <i data-lucide="eye" class="w-4 h-4 text-neutral-400"></i> Visibilité: Privé
+            </div>
+            <div class="flex items-center gap-2 text-sm text-neutral-300">
+              <i data-lucide="activity" class="w-4 h-4 text-neutral-400"></i> État: Ouvert aux inscriptions
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 border-t border-neutral-900">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="text-xs text-neutral-500">© 2025 TA — Plateforme de tournois</p>
+      <div class="flex items-center gap-4 text-xs text-neutral-400">
+        <a class="hover:text-neutral-200" href="#">Conditions</a>
+        <a class="hover:text-neutral-200" href="#">Règlement</a>
+        <a class="hover:text-neutral-200" href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Init lucide icons with stroke-width 1.5
+    if (window.lucide) {
+      lucide.createIcons({ attrs: { "stroke-width": 1.5 } });
+    }
+
+    // Simple "auth" simulation to reveal WhatsApp (no animations)
+    const revealBtn = document.getElementById('revealContactBtn');
+    const contactCard = document.getElementById('contactCard');
+    const promptCard = document.getElementById('contactPrompt');
+    const authState = document.getElementById('authState');
+    const loginBtn = document.getElementById('loginBtn');
+    let isLogged = false;
+
+    function revealContact() {
+      isLogged = true;
+      if (promptCard) promptCard.classList.add('hidden');
+      if (contactCard) contactCard.classList.remove('hidden');
+      if (authState) authState.textContent = 'Connecté';
+    }
+
+    if (revealBtn) revealBtn.addEventListener('click', revealContact);
+    if (loginBtn) loginBtn.addEventListener('click', revealContact);
+
+    // Copy phone
+    const copyBtn = document.getElementById('copyPhone');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText('+33612345678');
+          copyBtn.classList.add('bg-emerald-700','text-neutral-50');
+          copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Copié';
+          lucide.createIcons({ attrs: { "stroke-width": 1.5 } });
+          setTimeout(() => {
+            copyBtn.classList.remove('bg-emerald-700','text-neutral-50');
+            copyBtn.innerHTML = '<i data-lucide="copy" class="w-4 h-4"></i> Copier';
+            lucide.createIcons({ attrs: { "stroke-width": 1.5 } });
+          }, 1800);
+        } catch (e) {}
+      });
+    }
+  </script>
+
+</body></html>

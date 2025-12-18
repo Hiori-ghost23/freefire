@@ -1,0 +1,801 @@
+<html lang="fr"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paiements – En revue | Back-office</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+  <body class="bg-neutral-950 text-neutral-100 antialiased min-h-screen selection:bg-neutral-700/50" style="font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;">
+    <!-- App Shell -->
+    <div class="mx-auto max-w-[1400px] px-6 py-6">
+      <!-- Topbar -->
+      <header class="flex items-center justify-between gap-4 mb-6 opacity-0 translate-y-2 blur-[2px] transition-all duration-700 ease-out" data-animate="">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 rounded-md bg-neutral-900 ring-1 ring-white/10 flex items-center justify-center text-sm tracking-tight font-semibold">PB</div>
+          <div class="h-6 w-px bg-white/10"></div>
+          <nav class="text-sm text-neutral-400">
+            <span class="hover:text-neutral-200 transition-colors cursor-default">Back-office</span>
+            <span class="mx-2 text-neutral-600">/</span>
+            <span class="hover:text-neutral-200 transition-colors cursor-default">Paiements</span>
+            <span class="mx-2 text-neutral-600">/</span>
+            <span class="text-neutral-200">En revue</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="inline-flex items-center gap-2 rounded-md border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 hover:bg-neutral-800 hover:border-white/15 transition-colors">
+            <svg data-lucide="shield" class="h-4 w-4" stroke-width="1.5"></svg>
+            Sécurité
+          </button>
+          <button class="inline-flex items-center gap-2 rounded-md border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 hover:bg-neutral-800 hover:border-white/15 transition-colors">
+            <svg data-lucide="settings" class="h-4 w-4" stroke-width="1.5"></svg>
+            Paramètres
+          </button>
+        </div>
+      </header>
+
+      <!-- Title -->
+      <div class="mb-6 opacity-0 translate-y-2 blur-[2px] transition-all duration-700 ease-out delay-100" data-animate="">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 class="text-[28px] tracking-tight font-semibold text-neutral-50">Paiements – En revue</h1>
+            <p class="text-sm text-neutral-400 mt-1">Contrôlez, confirmez ou rejetez les paiements avec preuve(s) à l’appui.</p>
+          </div>
+          <div class="text-sm text-neutral-400">Fuseau: <span class="text-neutral-200" id="tzLabel">Europe/Paris</span></div>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="grid grid-cols-12 gap-6">
+        <!-- Left: Table and Filters -->
+        <section class="col-span-12 lg:col-span-7 space-y-4 opacity-0 translate-y-2 blur-[2px] transition-all duration-700 ease-out delay-150" data-animate="">
+          <!-- Filters -->
+          <div class="rounded-xl border border-white/10 bg-neutral-950/60 backdrop-blur-sm">
+            <div class="p-4 border-b border-white/10">
+              <div class="flex flex-wrap items-center gap-3">
+                <!-- Search -->
+                <div class="relative flex-1 min-w-[240px]">
+                  <svg data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500 pointer-events-none" stroke-width="1.5"></svg>
+                  <input id="searchInput" type="text" placeholder="Rechercher par code commande ou référence…" class="w-full rounded-md bg-neutral-900/80 border border-white/10 pl-9 pr-3 py-2 text-sm text-neutral-200 placeholder:text-neutral-500 outline-none focus:ring-2 focus:ring-neutral-700 focus:border-white/20 transition-all">
+                </div>
+                <!-- Status Filter -->
+                <div class="relative">
+                  <button id="statusFilterBtn" class="inline-flex items-center gap-2 rounded-md border border-white/10 bg-neutral-900/80 px-3 py-2 text-sm text-neutral-200 hover:bg-neutral-800 hover:border-white/15 transition-colors">
+                    <svg data-lucide="filter" class="h-4 w-4" stroke-width="1.5"></svg>
+                    Statut
+                    <span id="statusCountBadge" class="ml-1 hidden rounded-sm bg-neutral-800 px-1.5 py-0.5 text-[11px] text-neutral-300 border border-white/10">0</span>
+                    <svg data-lucide="chevron-down" class="h-4 w-4 ml-1 text-neutral-400" stroke-width="1.5"></svg>
+                  </button>
+                  <!-- Dropdown -->
+                  <div id="statusDropdown" class="absolute mt-2 w-56 rounded-md border border-white/10 bg-neutral-900/95 backdrop-blur-md shadow-2xl p-2 z-20 opacity-0 pointer-events-none translate-y-1 transition-all">
+                    <div class="px-2 py-1 text-[11px] uppercase tracking-wide text-neutral-400">Filtrer par statut</div>
+                    <div class="my-1 h-px bg-white/10"></div>
+                    <div class="space-y-2">
+                      <!-- Custom Checkboxes -->
+                      <label class="flex items-center gap-3 cursor-pointer select-none group">
+                        <span class="relative">
+                          <input type="checkbox" class="peer sr-only status-checkbox" value="En revue" checked="">
+                          <span class="h-4 w-4 rounded-[4px] border border-white/15 bg-neutral-950/80 group-hover:border-white/25 transition-all flex items-center justify-center">
+                            <svg data-lucide="check" class="h-3 w-3 text-neutral-200 opacity-0 peer-checked:opacity-100 transition-opacity" stroke-width="1.5"></svg>
+                          </span>
+                        </span>
+                        <span class="text-sm text-neutral-300">En revue</span>
+                      </label>
+                      <label class="flex items-center gap-3 cursor-pointer select-none group">
+                        <span class="relative">
+                          <input type="checkbox" class="peer sr-only status-checkbox" value="En attente">
+                          <span class="h-4 w-4 rounded-[4px] border border-white/15 bg-neutral-950/80 group-hover:border-white/25 transition-all flex items-center justify-center">
+                            <svg data-lucide="check" class="h-3 w-3 text-neutral-200 opacity-0 peer-checked:opacity-100 transition-opacity" stroke-width="1.5"></svg>
+                          </span>
+                        </span>
+                        <span class="text-sm text-neutral-300">En attente</span>
+                      </label>
+                      <label class="flex items-center gap-3 cursor-pointer select-none group">
+                        <span class="relative">
+                          <input type="checkbox" class="peer sr-only status-checkbox" value="Confirmé">
+                          <span class="h-4 w-4 rounded-[4px] border border-white/15 bg-neutral-950/80 group-hover:border-white/25 transition-all flex items-center justify-center">
+                            <svg data-lucide="check" class="h-3 w-3 text-neutral-200 opacity-0 peer-checked:opacity-100 transition-opacity" stroke-width="1.5"></svg>
+                          </span>
+                        </span>
+                        <span class="text-sm text-neutral-300">Confirmé</span>
+                      </label>
+                      <label class="flex items-center gap-3 cursor-pointer select-none group">
+                        <span class="relative">
+                          <input type="checkbox" class="peer sr-only status-checkbox" value="Rejeté">
+                          <span class="h-4 w-4 rounded-[4px] border border-white/15 bg-neutral-950/80 group-hover:border-white/25 transition-all flex items-center justify-center">
+                            <svg data-lucide="check" class="h-3 w-3 text-neutral-200 opacity-0 peer-checked:opacity-100 transition-opacity" stroke-width="1.5"></svg>
+                          </span>
+                        </span>
+                        <span class="text-sm text-neutral-300">Rejeté</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-auto text-xs text-neutral-400">
+                  <span id="resultCount">0</span> résultat(s)
+                </div>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="bg-neutral-950">
+                    <tr class="text-left text-neutral-400">
+                      <th class="font-medium px-4 py-3 border-t border-b border-white/10">Référence</th>
+                      <th class="font-medium px-4 py-3 border-t border-b border-white/10">Utilisateur</th>
+                      <th class="font-medium px-4 py-3 border-t border-b border-white/10">Pays</th>
+                      <th class="font-medium px-4 py-3 border-t border-b border-white/10">Méthode</th>
+                      <th class="font-medium px-4 py-3 border-t border-b border-white/10">Montant</th>
+                      <th class="font-medium px-4 py-3 border-t border-b border-white/10">Statut</th>
+                      <th class="font-medium px-4 py-3 border-t border-white/10"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="paymentsTbody" class="divide-y divide-white/10">
+                    <!-- Rows -->
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00891" data-reference="PAY-40819" data-user="Alice Martin" data-country="FR" data-method="Carte" data-amount="320.45" data-status="En revue" data-currency="EUR" data-proofs="[&quot;https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;,&quot;https://images.unsplash.com/photo-1553530979-7ee52a26d04f?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;,&quot;https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-40819</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00891</div>
+                      </td>
+                      <td class="px-4 py-3">Alice Martin</td>
+                      <td class="px-4 py-3">FR</td>
+                      <td class="px-4 py-3">Carte</td>
+                      <td class="px-4 py-3">€320,45</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                          En revue
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00777" data-reference="PAY-39421" data-user="Lucas Bernard" data-country="BE" data-method="Virement" data-amount="980.00" data-status="En revue" data-currency="EUR" data-proofs="[&quot;https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;,&quot;https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-39421</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00777</div>
+                      </td>
+                      <td class="px-4 py-3">Lucas Bernard</td>
+                      <td class="px-4 py-3">BE</td>
+                      <td class="px-4 py-3">Virement</td>
+                      <td class="px-4 py-3">€980,00</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                          En revue
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00612" data-reference="PAY-38840" data-user="Chloé Dubois" data-country="CH" data-method="Crypto" data-amount="1250.00" data-status="En attente" data-currency="CHF" data-proofs="[&quot;https://images.unsplash.com/photo-1518544887871-2fbef2b3b6b0?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-38840</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00612</div>
+                      </td>
+                      <td class="px-4 py-3">Chloé Dubois</td>
+                      <td class="px-4 py-3">CH</td>
+                      <td class="px-4 py-3">Crypto</td>
+                      <td class="px-4 py-3">CHF1 250,00</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-neutral-500/20 bg-neutral-700/20 text-neutral-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-neutral-400"></span>
+                          En attente
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00902" data-reference="PAY-41002" data-user="Noah Leroy" data-country="FR" data-method="Carte" data-amount="49.99" data-status="Confirmé" data-currency="EUR" data-proofs="[&quot;https://images.unsplash.com/photo-1519241047957-be31d7379a5d?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-41002</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00902</div>
+                      </td>
+                      <td class="px-4 py-3">Noah Leroy</td>
+                      <td class="px-4 py-3">FR</td>
+                      <td class="px-4 py-3">Carte</td>
+                      <td class="px-4 py-3">€49,99</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                          Confirmé
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00911" data-reference="PAY-41239" data-user="Emma Laurent" data-country="CA" data-method="PayPal" data-amount="210.00" data-status="En revue" data-currency="CAD" data-proofs="[&quot;https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;,&quot;https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-41239</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00911</div>
+                      </td>
+                      <td class="px-4 py-3">Emma Laurent</td>
+                      <td class="px-4 py-3">CA</td>
+                      <td class="px-4 py-3">PayPal</td>
+                      <td class="px-4 py-3">$210,00</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                          En revue
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00472" data-reference="PAY-37611" data-user="Yanis Moreau" data-country="DE" data-method="Virement" data-amount="420.35" data-status="Rejeté" data-currency="EUR" data-proofs="[&quot;https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-37611</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00472</div>
+                      </td>
+                      <td class="px-4 py-3">Yanis Moreau</td>
+                      <td class="px-4 py-3">DE</td>
+                      <td class="px-4 py-3">Virement</td>
+                      <td class="px-4 py-3">€420,35</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span>
+                          Rejeté
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-01003" data-reference="PAY-41590" data-user="Léa Petit" data-country="ES" data-method="Carte" data-amount="89.00" data-status="En revue" data-currency="EUR" data-proofs="[&quot;https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;,&quot;https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;,&quot;https://images.unsplash.com/photo-1543373072-69f48f0b6eb1?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-41590</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-01003</div>
+                      </td>
+                      <td class="px-4 py-3">Léa Petit</td>
+                      <td class="px-4 py-3">ES</td>
+                      <td class="px-4 py-3">Carte</td>
+                      <td class="px-4 py-3">€89,00</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                          En revue
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr class="hover:bg-neutral-900/50 cursor-pointer transition-colors" data-code="CMD-2024-00940" data-reference="PAY-41320" data-user="Sofia Garnier" data-country="IT" data-method="Carte" data-amount="59.99" data-status="En attente" data-currency="EUR" data-proofs="[&quot;https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&amp;w=1000&amp;auto=format&amp;fit=crop&quot;]">
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <span class="text-neutral-200 font-medium">PAY-41320</span>
+                        </div>
+                        <div class="text-xs text-neutral-500">CMD-2024-00940</div>
+                      </td>
+                      <td class="px-4 py-3">Sofia Garnier</td>
+                      <td class="px-4 py-3">IT</td>
+                      <td class="px-4 py-3">Carte</td>
+                      <td class="px-4 py-3">€59,99</td>
+                      <td class="px-4 py-3">
+                        <span class="inline-flex items-center gap-1 rounded-full border border-neutral-500/20 bg-neutral-700/20 text-neutral-300 px-2 py-0.5 text-xs">
+                          <span class="h-1.5 w-1.5 rounded-full bg-neutral-400"></span>
+                          En attente
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-right">
+                        <button class="inline-flex items-center gap-1.5 text-neutral-300 hover:text-neutral-100">
+                          <svg data-lucide="eye" class="h-4 w-4" stroke-width="1.5"></svg>
+                          Voir
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right: Detail View -->
+        <aside class="col-span-12 lg:col-span-5 space-y-4 lg:sticky lg:top-6 opacity-0 translate-y-2 blur-[2px] transition-all duration-700 ease-out delay-200" data-animate="">
+          <div class="rounded-xl border border-white/10 bg-neutral-950/60 backdrop-blur-sm overflow-hidden">
+            <div class="p-4 border-b border-white/10 flex items-start justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-neutral-500">Commande</span>
+                  <span class="text-xs px-1.5 py-0.5 rounded-sm bg-neutral-900 border border-white/10 text-neutral-300" id="detailCode">—</span>
+                </div>
+                <h2 class="mt-1 text-[20px] tracking-tight font-semibold text-neutral-50" id="detailRef">—</h2>
+                <div class="text-sm text-neutral-400" id="detailUser">—</div>
+              </div>
+              <div class="text-right">
+                <div id="detailStatusPill" class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-neutral-900 text-neutral-300 px-2 py-0.5 text-xs">—</div>
+              </div>
+            </div>
+
+            <!-- Proofs -->
+            <div class="p-4 border-b border-white/10">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-medium text-neutral-200 tracking-tight">Preuve(s)</h3>
+                <div class="text-xs text-neutral-500" id="proofCount">0 fichier(s)</div>
+              </div>
+              <div id="proofGrid" class="grid grid-cols-3 gap-2">
+                <!-- Proof thumbs injected -->
+              </div>
+              <div class="mt-3 text-xs text-neutral-500">Cliquez pour agrandir l’aperçu.</div>
+            </div>
+
+            <!-- Actions -->
+            <div class="p-4 border-b border-white/10 flex items-center gap-3">
+              <button id="confirmBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-600/90 hover:bg-emerald-500 text-neutral-50 px-3 py-2 text-sm border border-emerald-400/20 transition-colors disabled:opacity-50 disabled:pointer-events-none">
+                <svg data-lucide="shield-check" class="h-4 w-4" stroke-width="1.5"></svg>
+                Confirmer
+              </button>
+              <button id="rejectBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-rose-600/90 hover:bg-rose-500 text-neutral-50 px-3 py-2 text-sm border border-rose-400/20 transition-colors disabled:opacity-50 disabled:pointer-events-none">
+                <svg data-lucide="x-octagon" class="h-4 w-4" stroke-width="1.5"></svg>
+                Rejeter
+              </button>
+              <div class="ml-auto text-xs text-neutral-500 flex items-center gap-1.5">
+                <svg data-lucide="lock" class="h-3.5 w-3.5" stroke-width="1.5"></svg>
+                Actions tracées dans l’audit
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="p-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <div class="text-xs text-neutral-500">Méthode</div>
+                  <div class="text-sm text-neutral-200" id="detailMethod">—</div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs text-neutral-500">Pays</div>
+                  <div class="text-sm text-neutral-200" id="detailCountry">—</div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs text-neutral-500">Montant</div>
+                  <div class="text-sm text-neutral-200" id="detailAmount">—</div>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs text-neutral-500">Devise</div>
+                  <div class="text-sm text-neutral-200" id="detailCurrency">—</div>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm font-medium text-neutral-200 tracking-tight">Historique des actions</h3>
+                  <button id="clearAuditBtn" class="text-xs text-neutral-400 hover:text-neutral-200 transition-colors inline-flex items-center gap-1">
+                    <svg data-lucide="eraser" class="h-3.5 w-3.5" stroke-width="1.5"></svg> Effacer
+                  </button>
+                </div>
+                <div id="auditTrail" class="mt-3 space-y-3">
+                  <!-- Timeline items injected -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Toasts -->
+    <div id="toastStack" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Reject Modal -->
+    <div id="rejectModal" class="fixed inset-0 z-40 hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="w-full max-w-md rounded-xl border border-white/10 bg-neutral-950 shadow-2xl">
+          <div class="p-4 border-b border-white/10 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg data-lucide="x-octagon" class="h-4 w-4 text-rose-400" stroke-width="1.5"></svg>
+              <h4 class="text-sm font-medium text-neutral-100 tracking-tight">Rejeter le paiement</h4>
+            </div>
+            <button id="closeReject" class="text-neutral-400 hover:text-neutral-200">
+              <svg data-lucide="x" class="h-4 w-4" stroke-width="1.5"></svg>
+            </button>
+          </div>
+          <div class="p-4">
+            <label for="rejectReason" class="text-sm text-neutral-300">Motif du rejet</label>
+            <textarea id="rejectReason" rows="4" placeholder="Décrivez la raison du rejet…" class="mt-2 w-full rounded-md bg-neutral-900/80 border border-white/10 px-3 py-2 text-sm text-neutral-200 placeholder:text-neutral-500 outline-none focus:ring-2 focus:ring-neutral-700 focus:border-white/20 transition-all"></textarea>
+            <p id="rejectError" class="mt-2 text-xs text-rose-400 hidden">Le motif est obligatoire.</p>
+          </div>
+          <div class="p-4 border-t border-white/10 flex items-center justify-end gap-2">
+            <button id="cancelReject" class="inline-flex items-center gap-2 rounded-md border border-white/10 bg-neutral-900/80 px-3 py-2 text-sm text-neutral-200 hover:bg-neutral-800 hover:border-white/15 transition-colors">
+              Annuler
+            </button>
+            <button id="confirmReject" class="inline-flex items-center gap-2 rounded-md bg-rose-600/90 hover:bg-rose-500 text-neutral-50 px-3 py-2 text-sm border border-rose-400/20 transition-colors">
+              Rejeter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox for proofs -->
+    <div id="lightbox" class="fixed inset-0 z-40 hidden">
+      <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+      <div class="absolute inset-0 flex items-center justify-center p-6">
+        <div class="relative w-full max-w-5xl">
+          <img id="lightboxImg" src="" alt="Preuve" class="w-full h-[70vh] object-contain rounded-lg ring-1 ring-white/10 shadow-2xl">
+          <button id="lightboxClose" class="absolute -top-3 -right-3 h-9 w-9 rounded-full bg-neutral-900 ring-1 ring-white/10 text-neutral-200 hover:bg-neutral-800 flex items-center justify-center">
+            <svg data-lucide="x" class="h-5 w-5" stroke-width="1.5"></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Helpers
+      const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+      const $ = (sel, ctx = document) => ctx.querySelector(sel);
+
+      function showToast(message, type = 'success') {
+        const stack = $('#toastStack');
+        const toast = document.createElement('div');
+        const color = type === 'success' ? 'emerald' : type === 'error' ? 'rose' : 'neutral';
+        toast.className = 'pointer-events-auto rounded-lg border px-3 py-2 shadow-xl flex items-center gap-2 transition-all translate-y-2 opacity-0';
+        toast.className += ` bg-neutral-950 border-white/10 text-neutral-100`;
+        toast.innerHTML = `
+          <svg data-lucide="${type === 'success' ? 'check-circle2' : type === 'error' ? 'alert-triangle' : 'info'}" class="h-4 w-4 ${type === 'success' ? 'text-emerald-400' : type === 'error' ? 'text-rose-400' : 'text-neutral-400'}" stroke-width="1.5"></svg>
+          <span class="text-sm">${message}</span>
+          <button class="ml-2 text-neutral-400 hover:text-neutral-200">
+            <svg data-lucide="x" class="h-4 w-4" stroke-width="1.5"></svg>
+          </button>
+        `;
+        stack.appendChild(toast);
+        lucide.createIcons();
+        requestAnimationFrame(() => {
+          toast.classList.add('opacity-100', 'translate-y-0');
+        });
+        const close = () => {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', 'translate-y-2');
+          setTimeout(() => toast.remove(), 200);
+        };
+        toast.querySelector('button').addEventListener('click', close);
+        setTimeout(close, 3500);
+      }
+
+      function statusPill(status) {
+        const base = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs';
+        if (status === 'En revue') {
+          return `<span class="${base} border border-amber-500/20 bg-amber-500/10 text-amber-300"><span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>En revue</span>`;
+        }
+        if (status === 'En attente') {
+          return `<span class="${base} border border-neutral-500/20 bg-neutral-700/20 text-neutral-300"><span class="h-1.5 w-1.5 rounded-full bg-neutral-400"></span>En attente</span>`;
+        }
+        if (status === 'Confirmé') {
+          return `<span class="${base} border border-emerald-500/20 bg-emerald-500/10 text-emerald-300"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>Confirmé</span>`;
+        }
+        if (status === 'Rejeté') {
+          return `<span class="${base} border border-rose-500/20 bg-rose-500/10 text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span>Rejeté</span>`;
+        }
+        return `<span class="${base} border border-white/10 bg-neutral-900 text-neutral-300">—</span>`;
+      }
+
+      function formatAmount(amount, currency, country) {
+        try {
+          const locales = country === 'FR' ? 'fr-FR' : undefined;
+          return new Intl.NumberFormat(locales || undefined, { style: 'currency', currency: currency || 'EUR' }).format(parseFloat(amount));
+        } catch {
+          return amount + ' ' + (currency || '');
+        }
+      }
+
+      function updateResultCount() {
+        const visible = $$('#paymentsTbody tr').filter(tr => tr.style.display !== 'none').length;
+        $('#resultCount').textContent = visible;
+      }
+
+      function applyFilters() {
+        const q = ($('#searchInput').value || '').trim().toLowerCase();
+        const checked = $$('.status-checkbox').filter(cb => cb.checked).map(cb => cb.value);
+        const rows = $$('#paymentsTbody tr');
+        rows.forEach(tr => {
+          const code = tr.dataset.code.toLowerCase();
+          const ref = tr.dataset.reference.toLowerCase();
+          const status = tr.dataset.status;
+          let matches = true;
+          if (checked.length > 0 && !checked.includes(status)) matches = false;
+          if (q && !(code.includes(q) || ref.includes(q))) matches = false;
+          tr.style.display = matches ? '' : 'none';
+        });
+        updateResultCount();
+        // If selected row hidden, select first visible
+        const selected = $('#paymentsTbody tr[aria-selected="true"]');
+        if (selected && selected.style.display === 'none') {
+          const firstVisible = $$('#paymentsTbody tr').find(tr => tr.style.display !== 'none');
+          if (firstVisible) selectRow(firstVisible);
+          else clearDetail();
+        }
+        // Badge count
+        const badge = $('#statusCountBadge');
+        if ($$('.status-checkbox:checked').length > 0) {
+          badge.textContent = $$('.status-checkbox:checked').length;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+
+      function clearDetail() {
+        $('#detailCode').textContent = '—';
+        $('#detailRef').textContent = '—';
+        $('#detailUser').textContent = '—';
+        $('#detailStatusPill').innerHTML = '—';
+        $('#detailMethod').textContent = '—';
+        $('#detailCountry').textContent = '—';
+        $('#detailAmount').textContent = '—';
+        $('#detailCurrency').textContent = '—';
+        $('#proofGrid').innerHTML = '';
+        $('#proofCount').textContent = '0 fichier(s)';
+        $('#confirmBtn').disabled = true;
+        $('#rejectBtn').disabled = true;
+        $('#auditTrail').innerHTML = '';
+      }
+
+      function renderProofs(urls = []) {
+        const grid = $('#proofGrid');
+        grid.innerHTML = '';
+        urls.forEach((url, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'group relative aspect-square w-full overflow-hidden rounded-md ring-1 ring-white/10 hover:ring-white/20 bg-neutral-900';
+          btn.innerHTML = `
+            <img src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=1080&q=80" alt="Preuve ${i+1}" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-1 left-1 right-1 flex items-center justify-between text-[11px] text-neutral-300">
+              <span class="px-1.5 py-0.5 bg-neutral-900/80 rounded-sm border border-white/10">Preuve ${i+1}</span>
+              <svg data-lucide="maximize2" class="h-3.5 w-3.5 text-neutral-300" stroke-width="1.5"></svg>
+            </div>
+          `;
+          btn.addEventListener('click', () => openLightbox(url));
+          grid.appendChild(btn);
+        });
+        lucide.createIcons();
+        $('#proofCount').textContent = `${urls.length} fichier(s)`;
+      }
+
+      function renderAudit(items = []) {
+        const wrap = $('#auditTrail');
+        wrap.innerHTML = '';
+        items.forEach((it) => {
+          const row = document.createElement('div');
+          row.className = 'flex items-start gap-3';
+          row.innerHTML = `
+            <div class="mt-0.5">
+              <div class="h-2.5 w-2.5 rounded-full ${it.type === 'confirm' ? 'bg-emerald-400' : it.type === 'reject' ? 'bg-rose-400' : 'bg-neutral-400'}"></div>
+            </div>
+            <div class="flex-1">
+              <div class="text-sm text-neutral-200">${it.title}</div>
+              <div class="text-xs text-neutral-500">${it.time}</div>
+            </div>
+          `;
+          wrap.appendChild(row);
+        });
+      }
+
+      function selectRow(tr) {
+        // Deselect others
+        $$('#paymentsTbody tr').forEach(r => {
+          r.removeAttribute('aria-selected');
+          r.classList.remove('ring-1','ring-white/15');
+        });
+        tr.setAttribute('aria-selected', 'true');
+        tr.classList.add('ring-1','ring-white/15');
+
+        // Fill detail
+        const { code, reference, user, country, method, amount, status, currency } = tr.dataset;
+        $('#detailCode').textContent = code;
+        $('#detailRef').textContent = reference;
+        $('#detailUser').textContent = user;
+        $('#detailStatusPill').innerHTML = statusPill(status);
+        $('#detailMethod').textContent = method;
+        $('#detailCountry').textContent = country;
+        $('#detailAmount').textContent = formatAmount(amount, currency, country);
+        $('#detailCurrency').textContent = currency || '—';
+        const proofs = JSON.parse(tr.dataset.proofs || '[]');
+        renderProofs(proofs);
+        // Initial audit scaffold
+        const now = new Date();
+        const baseAudit = [
+          { title: `Créé par Système`, time: now.toLocaleDateString() + ' • ' + now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), type: 'info' },
+          { title: `Entré en revue`, time: now.toLocaleDateString() + ' • ' + now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), type: 'info' },
+        ];
+        renderAudit(baseAudit);
+        $('#auditTrail').dataset.baseAudit = JSON.stringify(baseAudit);
+        $('#confirmBtn').disabled = (status !== 'En revue' && status !== 'En attente');
+        $('#rejectBtn').disabled = (status !== 'En revue' && status !== 'En attente');
+      }
+
+      function updateRowStatus(tr, newStatus) {
+        tr.dataset.status = newStatus;
+        // Update cell pill
+        const pillCell = tr.children[5];
+        pillCell.innerHTML = statusPill(newStatus);
+        // Update detail pill if selected
+        if (tr.getAttribute('aria-selected') === 'true') {
+          $('#detailStatusPill').innerHTML = statusPill(newStatus);
+        }
+      }
+
+      // Lightbox
+      function openLightbox(url) {
+        const modal = $('#lightbox');
+        $('#lightboxImg').src = url;
+        modal.classList.remove('hidden');
+      }
+      function closeLightbox() {
+        $('#lightbox').classList.add('hidden');
+        $('#lightboxImg').src = '';
+      }
+
+      // Modal Reject
+      function openRejectModal() {
+        $('#rejectReason').value = '';
+        $('#rejectError').classList.add('hidden');
+        $('#rejectModal').classList.remove('hidden');
+      }
+      function closeRejectModal() {
+        $('#rejectModal').classList.add('hidden');
+      }
+
+      // Dropdown
+      function toggleDropdown(drop, btn) {
+        const isOpen = !drop.classList.contains('pointer-events-none');
+        if (isOpen) {
+          drop.classList.add('opacity-0','pointer-events-none','translate-y-1');
+          btn.classList.remove('ring-2','ring-white/10');
+        } else {
+          drop.classList.remove('opacity-0','pointer-events-none','translate-y-1');
+          btn.classList.add('ring-2','ring-white/10');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+
+        // Staggered animations
+        $$('[data-animate]').forEach((el, i) => {
+          setTimeout(() => {
+            el.classList.remove('opacity-0','translate-y-2','blur-[2px]');
+          }, 60 * (i + 1));
+        });
+
+        // Time zone label
+        try {
+          $('#tzLabel').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+        } catch {}
+
+        // Row click
+        $$('#paymentsTbody tr').forEach(tr => {
+          tr.addEventListener('click', () => selectRow(tr));
+        });
+
+        // Default filter: En revue
+        applyFilters();
+        // Select first visible row
+        const firstVisible = $$('#paymentsTbody tr').find(tr => tr.style.display !== 'none');
+        if (firstVisible) selectRow(firstVisible);
+
+        // Search
+        $('#searchInput').addEventListener('input', applyFilters);
+
+        // Status dropdown open/close
+        const btn = $('#statusFilterBtn');
+        const drop = $('#statusDropdown');
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleDropdown(drop, btn);
+        });
+        document.addEventListener('click', (e) => {
+          if (!drop.contains(e.target) && !btn.contains(e.target)) {
+            drop.classList.add('opacity-0','pointer-events-none','translate-y-1');
+            btn.classList.remove('ring-2','ring-white/10');
+          }
+        });
+
+        // Status checkbox change
+        $$('.status-checkbox').forEach(cb => {
+          cb.addEventListener('change', applyFilters);
+        });
+
+        // Confirm action
+        $('#confirmBtn').addEventListener('click', () => {
+          const tr = $('#paymentsTbody tr[aria-selected="true"]');
+          if (!tr) return;
+          updateRowStatus(tr, 'Confirmé');
+          const base = JSON.parse($('#auditTrail').dataset.baseAudit || '[]');
+          const now = new Date();
+          base.push({ title: `Confirmé par Vous`, time: now.toLocaleDateString() + ' • ' + now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), type: 'confirm' });
+          renderAudit(base);
+          $('#auditTrail').dataset.baseAudit = JSON.stringify(base);
+          showToast('Paiement confirmé avec succès.', 'success');
+          applyFilters();
+        });
+
+        // Reject action
+        $('#rejectBtn').addEventListener('click', openRejectModal);
+        $('#closeReject').addEventListener('click', closeRejectModal);
+        $('#cancelReject').addEventListener('click', closeRejectModal);
+        $('#confirmReject').addEventListener('click', () => {
+          const reason = ($('#rejectReason').value || '').trim();
+          if (!reason) {
+            $('#rejectError').classList.remove('hidden');
+            return;
+          }
+          $('#rejectError').classList.add('hidden');
+          const tr = $('#paymentsTbody tr[aria-selected="true"]');
+          if (!tr) return;
+          updateRowStatus(tr, 'Rejeté');
+          const base = JSON.parse($('#auditTrail').dataset.baseAudit || '[]');
+          const now = new Date();
+          base.push({ title: `Rejeté par Vous — Motif: ${reason}`, time: now.toLocaleDateString() + ' • ' + now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), type: 'reject' });
+          renderAudit(base);
+          $('#auditTrail').dataset.baseAudit = JSON.stringify(base);
+          showToast('Paiement rejeté.', 'error');
+          closeRejectModal();
+          applyFilters();
+        });
+
+        // Lightbox events
+        $('#lightboxClose').addEventListener('click', closeLightbox);
+        $('#lightbox').addEventListener('click', (e) => {
+          if (e.target.id === 'lightbox') closeLightbox();
+        });
+
+        // Clear audit trail
+        $('#clearAuditBtn').addEventListener('click', () => {
+          renderAudit([]);
+          $('#auditTrail').dataset.baseAudit = JSON.stringify([]);
+          showToast('Historique effacé.', 'info');
+        });
+      });
+    </script>
+  
+</body></html>
