@@ -52,7 +52,11 @@ app.include_router(tournaments.router, prefix="/tournaments", tags=["tournaments
 app.include_router(admin.router, prefix="/admin", tags=["administration"])
 
 # Configuration des fichiers statiques (CSS, JS, images)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+# Gérer le cas où le dossier n'existe pas (pour éviter les erreurs au démarrage)
+import os
+static_dir = "app/static"
+if os.path.exists(static_dir) and os.path.isdir(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 @app.get("/", response_model=HealthResponse)
 def root():
@@ -83,4 +87,6 @@ async def shutdown_event():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8080, reload=True)
+    # Utiliser le port depuis la variable d'environnement (Render) ou 8080 par défaut
+    port = int(os.getenv("PORT", 8080))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)

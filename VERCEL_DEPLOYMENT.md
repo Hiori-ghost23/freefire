@@ -50,7 +50,12 @@ Dans l'éditeur SQL de Supabase, exécuter dans l'ordre :
 3. Configurer le **Root Directory** : `api`
 4. Railway détectera automatiquement Python/FastAPI
 
-### 2.3 Configurer les variables d'environnement
+### 2.3 Vérifier les dépendances
+Assurez-vous que `api/requirements.txt` contient toutes les dépendances nécessaires, notamment :
+- `PyJWT==2.8.0` (pour l'authentification JWT)
+- `fastapi`, `uvicorn`, `sqlalchemy`, `psycopg2-binary`, etc.
+
+### 2.4 Configurer les variables d'environnement
 Dans Railway, aller dans **Variables** et ajouter :
 
 ```env
@@ -63,7 +68,7 @@ APP_DEBUG=false
 CORS_ORIGINS=https://votre-app.vercel.app
 ```
 
-### 2.4 Récupérer l'URL de l'API
+### 2.5 Récupérer l'URL de l'API
 Une fois déployé, Railway vous donne une URL comme :
 `https://freefire-api-production.up.railway.app`
 

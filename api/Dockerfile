@@ -26,8 +26,9 @@ COPY . .
 RUN adduser --disabled-password --gecos '' appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Exposer le port de l'API
+# Exposer le port de l'API (Render utilise une variable PORT dynamique)
 EXPOSE 8080
 
 # Commande par défaut pour démarrer l'application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Utiliser la variable PORT de Render ou 8080 par défaut
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}

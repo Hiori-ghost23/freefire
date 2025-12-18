@@ -214,14 +214,21 @@ async def upload_payment_proof(
             detail="Fichier trop volumineux. Maximum 5MB"
         )
     
-    # Créer la preuve de paiement
+    # Calculer le hash SHA256 du fichier (requis par le modèle)
+    import hashlib
+    file_hash = hashlib.sha256(content).hexdigest()
+    
+    # Créer l'URL temporaire (en production, utiliser MinIO/S3)
+    # Pour l'instant, on stocke juste les métadonnées
+    file_url = f"/storage/payment-proofs/{payment.id}/{file.filename}"
+    
+    # Créer la preuve de paiement selon le modèle
     proof = PaymentProof(
         payment_id=payment.id,
-        file_name=file.filename,
-        file_type=file.content_type,
-        file_size=len(content),
-        file_url=f"/storage/payment-proofs/{payment.id}/{file.filename}",  # À implémenter avec MinIO
-        status="pending"
+        file_url=file_url,
+        file_hash_sha256=file_hash,
+        mime=file.content_type or "application/octet-stream",
+        size_bytes=len(content)
     )
     
     db.add(proof)
@@ -230,11 +237,14 @@ async def upload_payment_proof(
     payment.status = "proof_uploaded"
     
     db.commit()
+    db.refresh(proof)
     
     return {
         "message": "Preuve de paiement uploadée avec succès",
         "proof_id": str(proof.id),
-        "status": "pending_validation"
+        "file_hash": file_hash,
+        "status": "pending_validation",
+        "note": "Le stockage de fichiers sera implémenté avec MinIO/S3 en production"
     }
 
 @router.get("/{payment_id}", response_model=PaymentResponse)
