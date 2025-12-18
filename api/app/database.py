@@ -6,11 +6,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 # URL de connexion à la base de données
-# Render utilise postgres:// mais SQLAlchemy nécessite postgresql://
+# Render peut fournir postgres:// ou postgresql:// selon la version
+# SQLAlchemy nécessite postgresql://, donc on normalise si nécessaire
 database_url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@db:5432/freefire_mvp")
-# Normaliser l'URL pour gérer les deux formats
+# Normaliser l'URL pour gérer les deux formats (postgres:// → postgresql://)
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
+# Note: Si l'URL commence déjà par postgresql://, elle sera utilisée telle quelle
 
 DATABASE_URL = database_url
 
