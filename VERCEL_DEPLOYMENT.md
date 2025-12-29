@@ -174,6 +174,12 @@ railway up
 
 ## 🆘 Dépannage
 
+### Erreur: ModuleNotFoundError: No module named 'jwt'
+**Solution**: Assurez-vous que `PyJWT==2.8.0` est dans `api/requirements.txt`
+
+### Erreur: ImportError: cannot import name 'AuthToken'
+**Solution**: Le projet utilise `EmailVerification` et `PasswordReset` au lieu d'un modèle `AuthToken` générique. Vérifiez que `auth_service.py` importe les bons modèles.
+
 ### Erreur CORS
 Vérifier que `CORS_ORIGINS` dans Railway inclut votre domaine Vercel.
 

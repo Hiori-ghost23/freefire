@@ -8,7 +8,7 @@ from typing import Optional
 import secrets
 from datetime import datetime, timedelta
 
-from app.models import User, AuthToken
+from app.models import User, UserProfile, EmailVerification, PasswordReset
 from app.dependencies.auth import create_access_token
 
 def hash_password(password: str) -> str:
@@ -35,7 +35,6 @@ def create_user(
     display_name: Optional[str] = None,
     uid_freefire: Optional[str] = None,
     phone: Optional[str] = None,
-    phone_code: Optional[str] = None,
     country: Optional[str] = None,
     role: str = "user"
 ) -> User:
@@ -54,18 +53,24 @@ def create_user(
     user = User(
         email=email,
         password_hash=hash_password(password),
-        display_name=display_name or email.split('@')[0],
-        uid_freefire=uid_freefire,
-        phone=phone,
-        phone_code=phone_code,
-        country_code=country,
-        role=role,
-        email_verified=False
+        role=role
     )
     
     db.add(user)
     db.commit()
     db.refresh(user)
+    
+    # Créer le profil utilisateur si des infos sont fournies
+    if display_name or uid_freefire or phone or country:
+        profile = UserProfile(
+            user_id=user.id,
+            display_name=display_name or email.split('@')[0],
+            uid_freefire=uid_freefire,
+            phone_msisdn=phone,
+            country_code=country
+        )
+        db.add(profile)
+        db.commit()
     
     # Créer un token de vérification email
     create_email_verification_token(db, user)
@@ -85,52 +90,51 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     
     return user
 
-def create_email_verification_token(db: Session, user: User) -> AuthToken:
+def create_email_verification_token(db: Session, user: User) -> EmailVerification:
     """
     Créer un token de vérification email
     """
     token = secrets.token_urlsafe(32)
     expires_at = datetime.utcnow() + timedelta(hours=24)
     
-    auth_token = AuthToken(
+    email_verification = EmailVerification(
         user_id=user.id,
         token=token,
-        token_type="email_verification",
-        expires_at=expires_at
+        expires_at=expires_at,
+        used=False
     )
     
-    db.add(auth_token)
+    db.add(email_verification)
     db.commit()
-    db.refresh(auth_token)
+    db.refresh(email_verification)
     
-    return auth_token
+    return email_verification
 
 def verify_email_token(db: Session, token: str) -> bool:
     """
     Vérifier un token de vérification email
     """
-    auth_token = db.query(AuthToken).filter(
-        AuthToken.token == token,
-        AuthToken.token_type == "email_verification",
-        AuthToken.used_at.is_(None),
-        AuthToken.expires_at > datetime.utcnow()
+    email_verification = db.query(EmailVerification).filter(
+        EmailVerification.token == token,
+        EmailVerification.used == False,
+        EmailVerification.expires_at > datetime.utcnow()
     ).first()
     
-    if not auth_token:
+    if not email_verification:
         return False
     
     # Marquer le token comme utilisé
-    auth_token.used_at = datetime.utcnow()
+    email_verification.used = True
     
     # Marquer l'email comme vérifié
-    user = db.query(User).filter(User.id == auth_token.user_id).first()
+    user = db.query(User).filter(User.id == email_verification.user_id).first()
     if user:
-        user.email_verified = True
+        user.email_verified_at = datetime.utcnow()
     
     db.commit()
     return True
 
-def create_password_reset_token(db: Session, email: str) -> Optional[AuthToken]:
+def create_password_reset_token(db: Session, email: str) -> Optional[PasswordReset]:
     """
     Créer un token de réinitialisation de mot de passe
     """
@@ -141,38 +145,37 @@ def create_password_reset_token(db: Session, email: str) -> Optional[AuthToken]:
     token = secrets.token_urlsafe(32)
     expires_at = datetime.utcnow() + timedelta(hours=1)
     
-    auth_token = AuthToken(
+    password_reset = PasswordReset(
         user_id=user.id,
         token=token,
-        token_type="password_reset",
-        expires_at=expires_at
+        expires_at=expires_at,
+        used=False
     )
     
-    db.add(auth_token)
+    db.add(password_reset)
     db.commit()
-    db.refresh(auth_token)
+    db.refresh(password_reset)
     
-    return auth_token
+    return password_reset
 
 def reset_password(db: Session, token: str, new_password: str) -> bool:
     """
     Réinitialiser le mot de passe avec un token
     """
-    auth_token = db.query(AuthToken).filter(
-        AuthToken.token == token,
-        AuthToken.token_type == "password_reset",
-        AuthToken.used_at.is_(None),
-        AuthToken.expires_at > datetime.utcnow()
+    password_reset = db.query(PasswordReset).filter(
+        PasswordReset.token == token,
+        PasswordReset.used == False,
+        PasswordReset.expires_at > datetime.utcnow()
     ).first()
     
-    if not auth_token:
+    if not password_reset:
         return False
     
     # Marquer le token comme utilisé
-    auth_token.used_at = datetime.utcnow()
+    password_reset.used = True
     
     # Changer le mot de passe
-    user = db.query(User).filter(User.id == auth_token.user_id).first()
+    user = db.query(User).filter(User.id == password_reset.user_id).first()
     if user:
         user.password_hash = hash_password(new_password)
     

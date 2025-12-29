@@ -11,7 +11,7 @@ from datetime import datetime
 
 from app.database import get_db
 from app.dependencies.auth import require_admin
-from app.models import User, Order, Payment, PaymentProof, Tournament, CatalogItem
+from app.models import User, UserProfile, Order, Payment, PaymentProof, Tournament, CatalogItem
 
 router = APIRouter()
 
@@ -108,17 +108,21 @@ def list_users(
     
     users = query.order_by(User.created_at.desc()).offset(skip).limit(limit).all()
     
-    return [
-        UserListResponse(
-            id=str(user.id),
-            email=user.email,
-            display_name=user.display_name,
-            role=user.role,
-            email_verified=user.email_verified,
-            created_at=user.created_at.isoformat()
+    result = []
+    for user in users:
+        profile = db.query(UserProfile).filter(UserProfile.user_id == user.id).first()
+        result.append(
+            UserListResponse(
+                id=str(user.id),
+                email=user.email,
+                display_name=profile.display_name if profile else user.email.split('@')[0],
+                role=user.role,
+                email_verified=user.email_verified_at is not None,
+                created_at=user.created_at.isoformat()
+            )
         )
-        for user in users
-    ]
+    
+    return result
 
 @router.put("/users/{user_id}/role")
 def update_user_role(

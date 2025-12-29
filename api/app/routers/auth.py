@@ -9,7 +9,7 @@ from typing import Optional
 from app.database import get_db
 from app.dependencies.auth import create_access_token, get_current_user
 from app.services import auth_service
-from app.models import User
+from app.models import User, UserProfile
 
 router = APIRouter()
 
@@ -123,7 +123,6 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
         display_name=request.display_name,
         uid_freefire=request.uid_freefire,
         phone=request.phone,
-        phone_code=request.phone_code,
         country=request.country
     )
     
@@ -139,9 +138,9 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
         user={
             "id": str(user.id),
             "email": user.email,
-            "display_name": user.display_name,
+            "display_name": request.display_name or user.email.split('@')[0],
             "role": user.role,
-            "email_verified": user.email_verified
+            "email_verified": user.email_verified_at is not None
         }
     )
 
@@ -176,28 +175,31 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         user={
             "id": str(user.id),
             "email": user.email,
-            "display_name": user.display_name,
+            "display_name": user.email.split('@')[0],
             "role": user.role,
-            "email_verified": user.email_verified
+            "email_verified": user.email_verified_at is not None
         }
     )
 
 @router.get("/me", response_model=UserResponse)
-def get_profile(current_user: User = Depends(get_current_user)):
+def get_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """
     Récupérer le profil de l'utilisateur connecté
     
     Nécessite un token JWT valide dans le header Authorization
     """
+    # Récupérer le profil utilisateur
+    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
+    
     return UserResponse(
         id=str(current_user.id),
         email=current_user.email,
-        display_name=current_user.display_name,
+        display_name=profile.display_name if profile else current_user.email.split('@')[0],
         role=current_user.role,
-        uid_freefire=current_user.uid_freefire,
-        phone=current_user.phone,
-        country_code=current_user.country_code,
-        email_verified=current_user.email_verified,
+        uid_freefire=profile.uid_freefire if profile else None,
+        phone=profile.phone_msisdn if profile else None,
+        country_code=profile.country_code if profile else None,
+        email_verified=current_user.email_verified_at is not None,
         created_at=current_user.created_at.isoformat()
     )
 
