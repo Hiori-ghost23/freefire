@@ -1,0 +1,34 @@
+# Configuration Render pour FreeFire MVP API
+# Ce fichier peut être utilisé pour déployer automatiquement sur Render
+# Documentation: https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: freefire-api
+    env: docker
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: ./api
+    plan: free
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: DATABASE_URL
+        sync: false  # À configurer manuellement avec l'URL de la DB Render
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PAYMENTS_HMAC_SECRET
+        generateValue: true
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"  # À modifier avec l'URL Vercel en production
+      - key: PORT
+        value: "8080"
+
+databases:
+  - name: freefire-db
+    plan: free
+    databaseName: freefire_mvp
+    user: freefire_user
+
+
