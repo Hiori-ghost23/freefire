@@ -2,7 +2,7 @@
 
 ## Problèmes Résolus
 
-### 1. ✅ Dépendance PyJWT manquante
+### 1. ✅ Dépendance PyJWT manquante (Backend)
 **Erreur**: `ModuleNotFoundError: No module named 'jwt'`
 
 **Cause**: Le code utilise `import jwt` mais `PyJWT` n'était pas dans `requirements.txt`
@@ -11,7 +11,7 @@
 
 ---
 
-### 2. ✅ Import AuthToken inexistant
+### 2. ✅ Import AuthToken inexistant (Backend)
 **Erreur**: `ImportError: cannot import name 'AuthToken' from 'app.models'`
 
 **Cause**: Le fichier `auth_service.py` importait un modèle `AuthToken` qui n'existe pas. Le projet utilise `EmailVerification` et `PasswordReset` à la place.
@@ -26,7 +26,7 @@
 
 ---
 
-### 3. ✅ Champs User inexistants
+### 3. ✅ Champs User inexistants (Backend)
 **Erreur**: Références à des champs qui n'existent pas dans le modèle `User`
 
 **Cause**: Le modèle `User` ne contient que les champs d'authentification. Les informations de profil sont dans `UserProfile`.
@@ -45,6 +45,24 @@
 - `api/app/services/auth_service.py`
   - Fonction `create_user()`: Crée séparément `User` et `UserProfile`
   - Fonction `verify_email_token()`: Utilise `email_verified_at` au lieu de `email_verified`
+
+---
+
+### 4. ✅ Classe Tailwind CSS inexistante (Frontend)
+**Erreur**: `The 'border-border' class does not exist`
+
+**Cause**: Le fichier `globals.css` utilisait `@apply border-border` mais la couleur `border` n'était pas définie dans le thème Tailwind.
+
+**Solution**: Remplacé `border-border` par `border-white/10` dans `frontend/src/app/globals.css`
+
+---
+
+### 5. ✅ Import lucide-react invalide (Frontend)
+**Erreur**: `'SquarePen' is not exported from 'lucide-react'`
+
+**Cause**: L'icône `SquarePen` n'existe pas dans lucide-react (version utilisée).
+
+**Solution**: Remplacé toutes les occurrences de `SquarePen` par `Edit2` dans `frontend/src/app/tournaments/my/page.tsx`
 
 ---
 

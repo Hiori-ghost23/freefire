@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus, Bell, Users, SquarePen, Trophy, Calendar, MapPin, Shield, Eye, Share2, CreditCard, Settings2, Share, Edit2, Trash2, Rocket, History, FileText, Ticket, Link, Upload, Check } from 'lucide-react';
+import { Plus, Bell, Users, Trophy, Calendar, MapPin, Shield, Eye, Share2, CreditCard, Settings2, Share, Edit2, Trash2, Rocket, History, FileText, Ticket, Link, Upload, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/lib/hooks/useToast';
 
@@ -232,7 +232,7 @@ export default function MyTournamentsPage() {
           <div className="flex items-start gap-3">
             <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-md bg-neutral-800 ring-1 ring-inset ring-neutral-700">
               {type === 'registered' && <Calendar className="h-5 w-5 text-neutral-300" />}
-              {type === 'created' && <SquarePen className="h-5 w-5 text-neutral-300" />}
+              {type === 'created' && <Edit2 className="h-5 w-5 text-neutral-300" />}
               {type === 'results' && <Trophy className="h-5 w-5 text-yellow-300" />}
             </div>
             <div>
@@ -402,7 +402,7 @@ export default function MyTournamentsPage() {
         action: () => router.push('/tournaments')
       },
       created: {
-        icon: <SquarePen className="h-5 w-5 text-neutral-400" />,
+        icon: <Edit2 className="h-5 w-5 text-neutral-400" />,
         title: "Vous n'avez pas encore créé de tournoi",
         description: "Lancez votre premier tournoi FreeFire en quelques minutes.",
         actionText: "Créer un tournoi",
@@ -511,7 +511,7 @@ export default function MyTournamentsPage() {
                       : 'text-neutral-300 hover:text-white hover:bg-neutral-800/80'
                   }`}
                 >
-                  <SquarePen className="h-4 w-4" />
+                  <Edit2 className="h-4 w-4" />
                   Créés
                 </button>
                 <button

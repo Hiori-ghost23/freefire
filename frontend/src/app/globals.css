@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-white/10;
   }
   body {
     @apply bg-neutral-950 text-neutral-100 antialiased selection:bg-primary/30 selection:text-primary-200;
