@@ -185,7 +185,7 @@ export default function TournamentsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight text-white">
-                  Tournois FreeFire
+                  Tournois GOKU E-SHOP
                 </h1>
                 <p className="mt-2 text-neutral-400">
                   Rejoignez les tournois et montrez vos compétences

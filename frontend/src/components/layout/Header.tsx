@@ -113,7 +113,7 @@ export default function Header({ user, onLogout }: HeaderProps) {
                 <span className="text-sm font-bold text-primary tracking-tight">FF</span>
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-lg font-semibold tracking-tight">FreeFire MVP</h1>
+                <h1 className="text-lg font-semibold tracking-tight">GOKU E-SHOP</h1>
                 <p className="text-xs text-neutral-400">Tournois & E-commerce</p>
               </div>
             </Link>

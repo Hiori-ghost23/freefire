@@ -545,7 +545,7 @@ export default function PaymentPage() {
                             <div className="text-sm text-purple-300">
                               <p className="font-medium">Instructions de transfert:</p>
                               <div className="mt-2 space-y-1">
-                                <p><span className="font-medium">Destinataire:</span> FreeFire MVP</p>
+                                <p><span className="font-medium">Destinataire:</span> GOKU E-SHOP</p>
                                 <p><span className="font-medium">Montant:</span> {formatCurrency(orderData.total, selectedCountryConfig!.currency)}</p>
                                 <p><span className="font-medium">Code de référence:</span> FF2024-{Math.random().toString(36).substr(2, 6).toUpperCase()}</p>
                                 <p className="mt-2 text-xs opacity-90">

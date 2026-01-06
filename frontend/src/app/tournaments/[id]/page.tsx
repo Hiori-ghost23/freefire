@@ -211,7 +211,7 @@ export default function TournamentDetailPage() {
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-indigo-500/10 ring-1 ring-inset ring-indigo-400/20 text-indigo-300 tracking-tight text-[13px] leading-none">
                 FF
               </div>
-              <span className="text-sm text-neutral-400">FreeFire Tournaments</span>
+              <span className="text-sm text-neutral-400">GOKU E-SHOP Tournaments</span>
             </div>
           </div>
           

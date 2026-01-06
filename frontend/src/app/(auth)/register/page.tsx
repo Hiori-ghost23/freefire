@@ -90,9 +90,11 @@ export default function RegisterPage() {
     const registerData = {
       email: data.email,
       password: data.password,
+      password_confirmation: data.password_confirmation,
       display_name: data.display_name,
-      phone: `${data.phone_code}${data.phone}`,
-      country_code: data.country,
+      phone: data.phone,
+      phone_code: data.phone_code,
+      country: data.country,
       uid_freefire: data.uid_freefire,
     };
 
@@ -422,7 +424,7 @@ export default function RegisterPage() {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-xs text-neutral-500">© 2024 Arthur project. Tous droits réservés.</p>
+            <p className="text-xs text-neutral-500">© 2024 GOKU E-SHOP. Tous droits réservés.</p>
           </div>
         </div>
       </div>

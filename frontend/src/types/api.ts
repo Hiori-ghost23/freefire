@@ -22,10 +22,11 @@ export interface UserLogin {
 export interface UserCreate {
   email: string;
   password: string;
-  password_confirmation?: string;
+  password_confirmation: string;
   display_name?: string;
   phone?: string;
-  country_code?: string;
+  phone_code?: string;
+  country?: string;
   uid_freefire?: string;
 }
 
@@ -44,10 +45,11 @@ export interface LoginResponse {
 export interface RegisterRequest {
   email: string;
   password: string;
-  password_confirmation?: string;
+  password_confirmation: string;
   display_name?: string;
   phone?: string;
-  country_code?: string;
+  phone_code?: string;
+  country?: string;
   uid_freefire?: string;
 }
 

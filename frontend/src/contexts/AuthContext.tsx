@@ -196,9 +196,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       return true;
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.detail || 
-        error.message || 
-        'Erreur de connexion';
+      // Handle validation errors from Pydantic (422)
+      let errorMessage = 'Erreur de connexion';
+      
+      const detail = error?.response?.data?.detail;
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail)) {
+        errorMessage = detail.map((err: any) => err.msg || err.message || JSON.stringify(err)).join(', ');
+      } else if (typeof detail === 'object' && detail !== null) {
+        errorMessage = detail.msg || detail.message || JSON.stringify(detail);
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
 
       dispatch({
         type: 'AUTH_ERROR',
@@ -239,9 +249,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       return true;
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.detail || 
-        error.message || 
-        'Erreur d\'inscription';
+      // Handle validation errors from Pydantic (422)
+      let errorMessage = 'Erreur d\'inscription';
+      
+      const detail = error?.response?.data?.detail;
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail)) {
+        // Pydantic validation errors are arrays of objects
+        errorMessage = detail.map((err: any) => err.msg || err.message || JSON.stringify(err)).join(', ');
+      } else if (typeof detail === 'object' && detail !== null) {
+        errorMessage = detail.msg || detail.message || JSON.stringify(detail);
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
 
       dispatch({
         type: 'AUTH_ERROR',

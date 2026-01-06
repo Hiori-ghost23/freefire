@@ -226,7 +226,7 @@ export default function CreateTournamentPage() {
                 <span className="text-[13px] tracking-tight font-semibold text-indigo-300">FF</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[13px] text-white/70">FreeFire Tournaments</span>
+                <span className="text-[13px] text-white/70">GOKU E-SHOP Tournaments</span>
                 <span className="text-[11px] text-white/40 -mt-0.5">Création réussie</span>
               </div>
             </div>
@@ -305,7 +305,7 @@ export default function CreateTournamentPage() {
                 <span className="text-[13px] tracking-tight font-semibold text-indigo-300">FF</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[13px] text-white/70">FreeFire Tournaments</span>
+                <span className="text-[13px] text-white/70">GOKU E-SHOP Tournaments</span>
                 <span className="text-[11px] text-white/40 -mt-0.5">Création guidée</span>
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function CreateTournamentPage() {
       <main className="flex-1">
         <section className="max-w-5xl mx-auto px-4 py-8 sm:py-12">
           <div className="mb-8">
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">Créer un tournoi FreeFire</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">Créer un tournoi</h1>
             <p className="text-white/60 mt-1 text-sm">Complétez les étapes pour soumettre votre tournoi à validation</p>
           </div>
 

@@ -115,13 +115,13 @@ export default function MyTournamentsPage() {
 
   const handleShare = async (tournament: TournamentCard, type: 'ticket' | 'tournament') => {
     const url = type === 'ticket' 
-      ? `https://freefire-tournaments.app/ticket/${tournament.registrationId?.replace('#', '')}`
-      : `https://freefire-tournaments.app/tournament/${tournament.id}`;
+      ? `https://goku-eshop.app/ticket/${tournament.registrationId?.replace('#', '')}`
+      : `https://goku-eshop.app/tournament/${tournament.id}`;
     
     try {
       if (navigator.share) {
         await navigator.share({
-          title: `FreeFire Tournaments - ${tournament.title}`,
+          title: `GOKU E-SHOP - ${tournament.title}`,
           url
         });
         addToast({
@@ -397,7 +397,7 @@ export default function MyTournamentsPage() {
       registered: {
         icon: <Users className="h-5 w-5 text-neutral-400" />,
         title: "Aucune inscription pour le moment",
-        description: "Inscrivez-vous à un tournoi FreeFire ou explorez les événements à venir.",
+        description: "Inscrivez-vous à un tournoi ou explorez les événements à venir.",
         actionText: "Explorer les tournois",
         action: () => router.push('/tournaments')
       },

@@ -10,7 +10,7 @@ const features = [
   {
     icon: Trophy,
     title: 'Tournois Compétitifs',
-    description: 'Participez aux tournois FreeFire et montrez vos compétences',
+    description: 'Participez aux tournois et montrez vos compétences',
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-400/10',
   },
@@ -68,14 +68,14 @@ export default function HomePage() {
             <div className="text-center">
               {/* Main heading */}
               <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-                <span className="block text-white">FreeFire</span>
+                <span className="block text-white">GOKU</span>
                 <span className="block bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
-                  Arena
+                  E-SHOP
                 </span>
               </h1>
               
               <p className="mt-6 max-w-2xl mx-auto text-lg leading-8 text-neutral-300">
-                La plateforme ultime pour les passionnés de FreeFire. 
+                La plateforme ultime pour les passionnés de gaming. 
                 Participez aux tournois, achetez des items premium et rejoignez la communauté.
               </p>
               
@@ -118,10 +118,10 @@ export default function HomePage() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Pourquoi choisir FreeFire Arena ?
+                Pourquoi choisir GOKU E-SHOP ?
               </h2>
               <p className="mt-4 text-lg text-neutral-400">
-                Tout ce dont vous avez besoin pour dominer dans FreeFire
+                Tout ce dont vous avez besoin pour dominer dans vos jeux
               </p>
             </div>
             
@@ -159,7 +159,7 @@ export default function HomePage() {
                     Prêt à devenir un champion ?
                   </h2>
                   <p className="mt-4 text-lg text-neutral-300">
-                    Rejoignez la communauté et commencez votre aventure FreeFire dès maintenant.
+                    Rejoignez la communauté et commencez votre aventure gaming dès maintenant.
                   </p>
                   <div className="mt-8 flex items-center justify-center gap-4">
                     <Button size="lg" asChild>
