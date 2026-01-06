@@ -18,6 +18,7 @@ JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24
 
 security = HTTPBearer()
+optional_security = HTTPBearer(auto_error=False)
 
 def create_access_token(user_id: str, email: str, role: str) -> str:
     """
@@ -70,7 +71,7 @@ def get_current_user(
     return user
 
 def get_optional_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(optional_security),
     db: Session = Depends(get_db)
 ) -> Optional[User]:
     """
@@ -80,8 +81,13 @@ def get_optional_user(
         return None
     
     try:
-        return get_current_user(credentials, db)
+        token = credentials.credentials
+        payload = decode_token(token)
+        user = db.query(User).filter(User.id == payload["user_id"]).first()
+        return user
     except HTTPException:
+        return None
+    except Exception:
         return None
 
 def require_role(required_role: str):

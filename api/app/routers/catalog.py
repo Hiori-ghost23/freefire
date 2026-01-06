@@ -17,104 +17,103 @@ router = APIRouter()
 
 class CatalogItemResponse(BaseModel):
     id: str
-    name: str
-    description: Optional[str]
-    price_xof: int
-    category: str
+    type: str
+    title: str
+    sku: str
+    price_amount: float
+    price_currency: str
+    attributes: Optional[dict]
     image_url: Optional[str]
-    in_stock: bool
-    metadata: Optional[dict]
+    active: bool
     created_at: str
     
     class Config:
         from_attributes = True
 
 class CreateCatalogItemRequest(BaseModel):
-    name: str = Field(..., min_length=3, max_length=200)
-    description: Optional[str] = None
-    price_xof: int = Field(..., gt=0)
-    category: str = Field(..., pattern="^(DIAMONDS|SUBSCRIPTION|PASS|SPECIAL)$")
+    type: str = Field(..., pattern="^(DIAMONDS|SUBSCRIPTION|PASS|SPECIAL)$")
+    title: str = Field(..., min_length=3, max_length=120)
+    sku: str = Field(..., min_length=3, max_length=60)
+    price_amount: float = Field(..., gt=0)
+    price_currency: str = Field(default="XOF", max_length=3)
+    attributes: Optional[dict] = {}
     image_url: Optional[str] = None
-    in_stock: bool = True
-    metadata: Optional[dict] = None
+    active: bool = True
     
     class Config:
         json_schema_extra = {
             "example": {
-                "name": "1580 Diamants FreeFire",
-                "description": "Pack de diamants avec bonus",
-                "price_xof": 1600,
-                "category": "DIAMONDS",
+                "type": "DIAMONDS",
+                "title": "1580 Diamants FreeFire",
+                "sku": "FF-DIAMONDS-1580",
+                "price_amount": 1600,
+                "price_currency": "XOF",
+                "attributes": {"bonus": "80 diamants bonus"},
                 "image_url": "https://example.com/diamonds.jpg",
-                "in_stock": True,
-                "metadata": {
-                    "bonus": "80 diamants bonus",
-                    "popular": True
-                }
+                "active": True
             }
         }
 
 class UpdateCatalogItemRequest(BaseModel):
-    name: Optional[str] = Field(None, min_length=3, max_length=200)
-    description: Optional[str] = None
-    price_xof: Optional[int] = Field(None, gt=0)
-    category: Optional[str] = Field(None, pattern="^(DIAMONDS|SUBSCRIPTION|PASS|SPECIAL)$")
+    type: Optional[str] = Field(None, pattern="^(DIAMONDS|SUBSCRIPTION|PASS|SPECIAL)$")
+    title: Optional[str] = Field(None, min_length=3, max_length=120)
+    price_amount: Optional[float] = Field(None, gt=0)
+    attributes: Optional[dict] = None
     image_url: Optional[str] = None
-    in_stock: Optional[bool] = None
-    metadata: Optional[dict] = None
+    active: Optional[bool] = None
 
 @router.get("/catalog", response_model=List[CatalogItemResponse])
 def list_catalog_items(
-    category: Optional[str] = None,
-    in_stock: Optional[bool] = None,
-    db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_optional_user)
+    type: Optional[str] = None,
+    active: Optional[bool] = None,
+    db: Session = Depends(get_db)
 ):
     """
     Lister tous les produits du catalogue
     
-    - **category**: Filtrer par catégorie (DIAMONDS, SUBSCRIPTION, PASS, SPECIAL)
-    - **in_stock**: Filtrer par disponibilité
+    - **type**: Filtrer par type (DIAMONDS, SUBSCRIPTION, PASS, SPECIAL)
+    - **active**: Filtrer par disponibilité
     
-    Endpoint public, authentification optionnelle
+    Endpoint public, pas d'authentification requise
     """
     query = db.query(CatalogItem)
     
-    if category:
-        query = query.filter(CatalogItem.category == category)
+    if type:
+        query = query.filter(CatalogItem.type == type)
     
-    if in_stock is not None:
-        query = query.filter(CatalogItem.in_stock == in_stock)
+    if active is not None:
+        query = query.filter(CatalogItem.active == active)
     
-    items = query.order_by(CatalogItem.price_xof).all()
+    items = query.order_by(CatalogItem.price_amount).all()
     
     return [
         CatalogItemResponse(
             id=str(item.id),
-            name=item.name,
-            description=item.description,
-            price_xof=item.price_xof,
-            category=item.category,
+            type=item.type,
+            title=item.title,
+            sku=item.sku,
+            price_amount=float(item.price_amount),
+            price_currency=item.price_currency,
+            attributes=item.attributes,
             image_url=item.image_url,
-            in_stock=item.in_stock,
-            metadata=item.metadata,
+            active=item.active,
             created_at=item.created_at.isoformat()
         )
         for item in items
     ]
 
+
 @router.get("/catalog/{item_id}", response_model=CatalogItemResponse)
 def get_catalog_item(
     item_id: UUID,
-    db: Session = Depends(get_db),
-    current_user: Optional[User] = Depends(get_optional_user)
+    db: Session = Depends(get_db)
 ):
     """
     Récupérer les détails d'un produit
     
     - **item_id**: ID du produit
     
-    Endpoint public, authentification optionnelle
+    Endpoint public, pas d'authentification requise
     """
     item = db.query(CatalogItem).filter(CatalogItem.id == item_id).first()
     
@@ -126,13 +125,14 @@ def get_catalog_item(
     
     return CatalogItemResponse(
         id=str(item.id),
-        name=item.name,
-        description=item.description,
-        price_xof=item.price_xof,
-        category=item.category,
+        type=item.type,
+        title=item.title,
+        sku=item.sku,
+        price_amount=float(item.price_amount),
+        price_currency=item.price_currency,
+        attributes=item.attributes,
         image_url=item.image_url,
-        in_stock=item.in_stock,
-        metadata=item.metadata,
+        active=item.active,
         created_at=item.created_at.isoformat()
     )
 
@@ -144,23 +144,24 @@ def create_catalog_item(
 ):
     """
     Créer un nouveau produit dans le catalogue (Admin uniquement)
-    
-    - **name**: Nom du produit
-    - **description**: Description détaillée
-    - **price_xof**: Prix en XOF
-    - **category**: Catégorie (DIAMONDS, SUBSCRIPTION, PASS, SPECIAL)
-    - **image_url**: URL de l'image
-    - **in_stock**: Disponibilité
-    - **metadata**: Métadonnées additionnelles (JSON)
     """
+    # Vérifier si le SKU existe déjà
+    existing = db.query(CatalogItem).filter(CatalogItem.sku == request.sku).first()
+    if existing:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Ce SKU existe déjà"
+        )
+    
     item = CatalogItem(
-        name=request.name,
-        description=request.description,
-        price_xof=request.price_xof,
-        category=request.category,
+        type=request.type,
+        title=request.title,
+        sku=request.sku,
+        price_amount=request.price_amount,
+        price_currency=request.price_currency,
+        attributes=request.attributes or {},
         image_url=request.image_url,
-        in_stock=request.in_stock,
-        metadata=request.metadata
+        active=request.active
     )
     
     db.add(item)
@@ -169,13 +170,14 @@ def create_catalog_item(
     
     return CatalogItemResponse(
         id=str(item.id),
-        name=item.name,
-        description=item.description,
-        price_xof=item.price_xof,
-        category=item.category,
+        type=item.type,
+        title=item.title,
+        sku=item.sku,
+        price_amount=float(item.price_amount),
+        price_currency=item.price_currency,
+        attributes=item.attributes,
         image_url=item.image_url,
-        in_stock=item.in_stock,
-        metadata=item.metadata,
+        active=item.active,
         created_at=item.created_at.isoformat()
     )
 
@@ -188,10 +190,6 @@ def update_catalog_item(
 ):
     """
     Modifier un produit du catalogue (Admin uniquement)
-    
-    - **item_id**: ID du produit à modifier
-    
-    Tous les champs sont optionnels, seuls les champs fournis seront modifiés
     """
     item = db.query(CatalogItem).filter(CatalogItem.id == item_id).first()
     
@@ -201,34 +199,32 @@ def update_catalog_item(
             detail="Produit non trouvé"
         )
     
-    # Mettre à jour les champs fournis
-    if request.name is not None:
-        item.name = request.name
-    if request.description is not None:
-        item.description = request.description
-    if request.price_xof is not None:
-        item.price_xof = request.price_xof
-    if request.category is not None:
-        item.category = request.category
+    if request.type is not None:
+        item.type = request.type
+    if request.title is not None:
+        item.title = request.title
+    if request.price_amount is not None:
+        item.price_amount = request.price_amount
+    if request.attributes is not None:
+        item.attributes = request.attributes
     if request.image_url is not None:
         item.image_url = request.image_url
-    if request.in_stock is not None:
-        item.in_stock = request.in_stock
-    if request.metadata is not None:
-        item.metadata = request.metadata
+    if request.active is not None:
+        item.active = request.active
     
     db.commit()
     db.refresh(item)
     
     return CatalogItemResponse(
         id=str(item.id),
-        name=item.name,
-        description=item.description,
-        price_xof=item.price_xof,
-        category=item.category,
+        type=item.type,
+        title=item.title,
+        sku=item.sku,
+        price_amount=float(item.price_amount),
+        price_currency=item.price_currency,
+        attributes=item.attributes,
         image_url=item.image_url,
-        in_stock=item.in_stock,
-        metadata=item.metadata,
+        active=item.active,
         created_at=item.created_at.isoformat()
     )
 
@@ -240,10 +236,6 @@ def delete_catalog_item(
 ):
     """
     Supprimer un produit du catalogue (Admin uniquement)
-    
-    - **item_id**: ID du produit à supprimer
-    
-    Note: La suppression est définitive
     """
     item = db.query(CatalogItem).filter(CatalogItem.id == item_id).first()
     
