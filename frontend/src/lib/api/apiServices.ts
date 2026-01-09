@@ -85,10 +85,12 @@ export const catalogAPI = {
     return response.data;
   },
 
-  // GET /catalog/types
+  // Note: La route /catalog/types n'existe pas encore côté backend
+  // Pour l'instant, on peut filtrer côté client ou créer la route backend
   getTypes: async (): Promise<string[]> => {
-    const response = await apiClient.get('/catalog/types');
-    return response.data;
+    // Pour l'instant, retourner les types connus
+    // TODO: Créer la route backend /catalog/types si nécessaire
+    return ['DIAMONDS', 'SUBSCRIPTION', 'PASS', 'SPECIAL'];
   },
 };
 
@@ -97,21 +99,21 @@ export const catalogAPI = {
 // ============================================================================
 
 export const orderAPI = {
-  // POST /order
+  // POST /orders
   create: async (data: CreateOrderRequest): Promise<OrderResponse> => {
-    const response = await apiClient.post('/order', data);
+    const response = await apiClient.post('/orders', data);
     return response.data;
   },
 
-  // GET /orders (mes commandes)
+  // GET /orders/mine (mes commandes)
   getMy: async (): Promise<OrderResponse[]> => {
-    const response = await apiClient.get('/orders');
+    const response = await apiClient.get('/orders/mine');
     return response.data;
   },
 
-  // GET /orders/{id}
-  getById: async (id: string): Promise<OrderResponse> => {
-    const response = await apiClient.get(`/orders/${id}`);
+  // GET /orders/{order_code}
+  getById: async (orderCode: string): Promise<OrderResponse> => {
+    const response = await apiClient.get(`/orders/${orderCode}`);
     return response.data;
   },
 };
@@ -133,9 +135,9 @@ export const paymentAPI = {
     return response.data;
   },
 
-  // GET /payments/methods/{country}
+  // GET /payments/methods?country=XX
   getMethods: async (country: string): Promise<MethodsResponse> => {
-    const response = await apiClient.get(`/payments/methods/${country}`);
+    const response = await apiClient.get(`/payments/methods`, { params: { country } });
     return response.data;
   },
 
@@ -193,15 +195,15 @@ export const tournamentAPI = {
     return response.data;
   },
 
-  // POST /tournaments/register (s'inscrire à un tournoi)
-  register: async (data: TournamentRegistrationRequest): Promise<TournamentRegistrationResponse> => {
-    const response = await apiClient.post('/tournaments/register', data);
+  // POST /tournaments/{tournament_id}/register (s'inscrire à un tournoi)
+  register: async (tournamentId: string, data: TournamentRegistrationRequest): Promise<TournamentRegistrationResponse> => {
+    const response = await apiClient.post(`/tournaments/${tournamentId}/register`, data);
     return response.data;
   },
 
-  // GET /tournaments/registrations (mes inscriptions)
+  // GET /tournaments/my/registrations (mes inscriptions)
   getMyRegistrations: async (): Promise<TournamentRegistrationResponse[]> => {
-    const response = await apiClient.get('/tournaments/registrations');
+    const response = await apiClient.get('/tournaments/my/registrations');
     return response.data;
   },
 };

@@ -18,17 +18,21 @@ export const authService = {
   },
   
   getProfile: async (): Promise<User> => {
-    const response = await apiClient.get('/auth/profile');
+    const response = await apiClient.get('/auth/me');
     return response.data;
   },
 
+  // Note: Les routes updateProfile et changePassword n'existent pas encore côté backend
+  // TODO: Créer ces routes si nécessaire
   updateProfile: async (data: Partial<User>): Promise<User> => {
-    const response = await apiClient.put('/auth/profile', data);
+    // Pour l'instant, retourner l'utilisateur actuel
+    const response = await apiClient.get('/auth/me');
     return response.data;
   },
 
   changePassword: async (data: { current_password: string; new_password: string }): Promise<void> => {
-    await apiClient.post('/auth/change-password', data);
+    // TODO: Créer la route backend /auth/change-password
+    throw new Error('Route not implemented yet');
   },
 
   verifyEmail: async (token: string): Promise<void> => {
@@ -36,7 +40,7 @@ export const authService = {
   },
 
   requestPasswordReset: async (email: string): Promise<void> => {
-    await apiClient.post('/auth/request-reset', { email });
+    await apiClient.post('/auth/forgot-password', { email });
   },
 };
 
@@ -83,14 +87,17 @@ export const tournamentsService = {
     return response.data;
   },
 
+  // Note: Les routes /tournaments/mine et /tournaments/created n'existent pas encore
+  // Utiliser /tournaments/my/registrations pour les inscriptions
   getMyTournaments: async () => {
-    const response = await apiClient.get('/tournaments/mine');
+    const response = await apiClient.get('/tournaments/my/registrations');
     return response.data;
   },
 
   getMyCreatedTournaments: async () => {
-    const response = await apiClient.get('/tournaments/created');
-    return response.data;
+    // TODO: Créer la route backend /tournaments/my/created si nécessaire
+    // Pour l'instant, retourner un tableau vide
+    return [];
   },
 };
 
